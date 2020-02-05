@@ -147,12 +147,37 @@ def demo():
 
     print(f"RV Score: {rv_score:.6f}\nNormalized RV Score: {nrv_score:.6f}.")
 
+    print("Centered Method (Features):")
+    # initialize method
+    clf_linear_rv = LinearRV()
+
+    # fit method
+    clf_linear_rv.fit(X.T, Y.T)
+
+    # calculate scores
+    rv_score = clf_linear_rv.score(X, Y, normalized=False)
+    nrv_score = clf_linear_rv.score(X, Y, normalized=True)
+    print(f"RV Score: {rv_score:.6f}\nNormalized RV Score: {nrv_score:.6f}.")
+
     print("\nUncentered Method:")
     # initialize method
     clf_linear_rv = LinearRV(center=False)
 
     # fit method
     clf_linear_rv.fit(X, Y)
+
+    # calculate scores
+    rv_score = clf_linear_rv.score(X, Y, normalized=False)
+    nrv_score = clf_linear_rv.score(X, Y, normalized=True)
+
+    print(f"RV Score: {rv_score:.6f}\nNormalized RV Score: {nrv_score:.6f}.")
+
+    print("\nUncentered Method (Features):")
+    # initialize method
+    clf_linear_rv = LinearRV(center=False)
+
+    # fit method
+    clf_linear_rv.fit(X.T, Y.T)
 
     # calculate scores
     rv_score = clf_linear_rv.score(X, Y, normalized=False)
