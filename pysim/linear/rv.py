@@ -20,6 +20,9 @@ class LinearRV(BaseEstimator):
     subsample : int, default=None
         The option to subsample the data.
 
+    bias : bool, default=True
+        Bias term for the RV coefficient
+        
     random_state : int, default=123
         The random state for the subsample.
 
