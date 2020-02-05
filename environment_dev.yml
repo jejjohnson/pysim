@@ -1,0 +1,15 @@
+name: pysim
+channels:
+- defaults
+dependences:
+- python=3.8
+# Standard Libraries
+- numpy
+- scipy
+- scikit-learn
+# Dev Libraries
+- ipykernel
+- pytest
+- black
+- pip
+- mypy
