@@ -1,10 +1,10 @@
+from typing import Callable, Optional, Union
+
 import numpy as np
-from typing import Optional, Callable, Union
 from sklearn.base import BaseEstimator
-from sklearn.metrics.pairwise import pairwise_kernels, linear_kernel
+from sklearn.metrics.pairwise import linear_kernel, pairwise_kernels
 from sklearn.preprocessing import KernelCenterer
-from sklearn.utils import check_random_state
-from sklearn.utils import check_array
+from sklearn.utils import check_array, check_random_state
 
 
 class LinearRV(BaseEstimator):

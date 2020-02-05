@@ -1,10 +1,10 @@
+from typing import Callable, Optional, Union
+
 import numpy as np
-from typing import Optional, Callable, Union
 from sklearn.base import BaseEstimator
-from sklearn.metrics.pairwise import pairwise_kernels, linear_kernel
+from sklearn.metrics.pairwise import linear_kernel, pairwise_kernels
 from sklearn.preprocessing import KernelCenterer
-from sklearn.utils import check_random_state
-from sklearn.utils import check_array
+from sklearn.utils import check_array, check_random_state
 
 
 class LinearRV(BaseEstimator):
@@ -32,7 +32,7 @@ class LinearRV(BaseEstimator):
     -----------
     Author : J. Emmanuel Johnson
     Email  : jemanjohnson34@gmail.com
-    Date   : 14-Feb-2019
+    Date   : 5-Feb-2020
     """
 
     def __init__(
@@ -126,7 +126,7 @@ def demo():
     np.random.seed(123)
     n_samples = 1000
     n_features = 2
-    A = np.random.randn(n_features, n_features)
+    A = np.random.rand(n_features, n_features)
 
     X = np.random.randn(n_samples, n_features)
     Y = X @ A
@@ -144,7 +144,7 @@ def demo():
 
     print(f"RV Score: {rv_score:.6f}\nNormalized RV Score: {nrv_score:.6f}.")
 
-    print("Uncentered Method:")
+    print("\nUncentered Method:")
     # initialize method
     clf_linear_rv = LinearRV(center=False)
 
