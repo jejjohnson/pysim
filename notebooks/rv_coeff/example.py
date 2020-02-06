@@ -15,9 +15,9 @@ def main():
 
     Sigma_xy = np.cov(X, Y)
 
-    print("RV Cov:", np.trace(Sigma_xy @ Sigma_xy.T))
-    print("RV Cov:", np.sum(Sigma_xy * Sigma_xy))
-    print("RV Cov:", np.linalg.norm(Sigma_xy) ** 2)
+    print(f"RV Cov: {np.trace(Sigma_xy @ Sigma_xy.T):.3f}")
+    print(f"RV Cov: {np.sum(Sigma_xy * Sigma_xy):.3f}",)
+    print(f"RV Cov: {np.linalg.norm(Sigma_xy) ** 2:.3f}",)
 
 
 if __name__ == "__main__":
