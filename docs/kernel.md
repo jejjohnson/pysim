@@ -18,16 +18,17 @@
 
 ---
 
-- [Covariance Measures](#covariance-measures)
-  - [Uncentered Kernel](#uncentered-kernel)
-  - [Centered Kernel](#centered-kernel)
-    - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic)
-    - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd)
-- [Correlation Measures](#correlation-measures)
-  - [Uncentered Kernel](#uncentered-kernel-1)
-    - [Kernel Alignment (KA)](#kernel-alignment-ka)
-  - [Uncentered Kernel](#uncentered-kernel-2)
-    - [Centered Kernel Alignment (cKA)](#centered-kernel-alignment-cka)
+- [Kernel Measures of Similarity](#kernel-measures-of-similarity)
+  - [Covariance Measures](#covariance-measures)
+    - [Uncentered Kernel](#uncentered-kernel)
+    - [Centered Kernel](#centered-kernel)
+      - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic)
+      - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd)
+  - [Correlation Measures](#correlation-measures)
+    - [Uncentered Kernel](#uncentered-kernel-1)
+      - [Kernel Alignment (KA)](#kernel-alignment-ka)
+    - [Uncentered Kernel](#uncentered-kernel-2)
+      - [Centered Kernel Alignment (cKA)](#centered-kernel-alignment-cka)
 
 
 ---
@@ -74,7 +75,7 @@ $$\text{cov}(\mathbf{X}, \mathbf{Y}) = ||K_\mathbf{x}||_\mathcal{F} + ||K_\mathb
 
 #### Kernel Alignment (KA)
 
- $$\rho(\mathbf{X}, \mathbf{Y})
+$$\rho(\mathbf{X}, \mathbf{Y})
 =\frac{\langle \tilde{K}_\mathbf{x}, \tilde{K}_\mathbf{y} \rangle_\mathcal{F}}{||\tilde{K}_\mathbf{x}||_\mathcal{F}||\tilde{K}_\mathbf{y}||_\mathcal{F}}$$
 
 **In the Literature**
