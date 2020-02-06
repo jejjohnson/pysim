@@ -17,7 +17,6 @@
 * $\mathbf{X},\mathbf{Y}$ must have different number of samples
 
 ---
-
 - [Kernel Measures of Similarity](#kernel-measures-of-similarity)
   - [Covariance Measures](#covariance-measures)
     - [Uncentered Kernel](#uncentered-kernel)

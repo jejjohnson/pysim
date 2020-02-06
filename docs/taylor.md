@@ -1,8 +1,30 @@
-### Taylor Diagram
+# Taylor Diagram
+
+- [Taylor Diagram](#taylor-diagram)
+  - [Cosine Similarity](#cosine-similarity)
+  - [Law of Cosines](#law-of-cosines)
+  - [Taylor Diagram](#taylor-diagram-1)
+  - [Example](#example)
+
+---
+
+## Cosine Similarity
+
+$$A \cdot B = ||A|| \; ||B|| \; cos \theta$$
+
+
+---
+
+## Law of Cosines
 
 The Taylor Diagram was a way to summarize the data statistics in a way that was easy to interpret. It used the relationship between the covariance, the correlation and the root mean squared error via the triangle inequality. Assuming we can draw a diagram using the law of cosines;
 
 $$c^2 = a^2 + b^2 - 2ab \cos \phi$$
+
+
+---
+
+## Taylor Diagram
 
 we can write this in terms of $\sigma$, $\rho$ and $RMSE$ as we have expressed above.
 
@@ -17,7 +39,7 @@ The sides are as follows:
 
 So, the important quantities needed to be able to plot points on the Taylor diagram are the $\sigma$ and $\theta= \arccos \rho$. If we assume that the observed data is given by $\sigma_{\text{obs}}, \theta=0$, then we can plot the rest of the comparisons via $\sigma_{\text{sim}}, \theta=\arccos \rho$.
 
-#### Example
+## Example
 
 <p float='center'> 
   <img src="thesis/appendix/information/pics/vi/demo_taylor.png" width="500" />
