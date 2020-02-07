@@ -23,6 +23,7 @@
 
 #### Methods
 
+* Linear Regression
 * Correlation Coefficient, RMSE
 * RV Coefficient, ?
 * Centered Kernel Alignment

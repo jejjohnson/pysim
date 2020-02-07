@@ -17,17 +17,17 @@
 * $\mathbf{X},\mathbf{Y}$ must have different number of samples
 
 ---
-- [Kernel Measures of Similarity](#kernel-measures-of-similarity)
-  - [Covariance Measures](#covariance-measures)
-    - [Uncentered Kernel](#uncentered-kernel)
-    - [Centered Kernel](#centered-kernel)
-      - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic)
-      - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd)
-  - [Correlation Measures](#correlation-measures)
-    - [Uncentered Kernel](#uncentered-kernel-1)
-      - [Kernel Alignment (KA)](#kernel-alignment-ka)
-    - [Uncentered Kernel](#uncentered-kernel-2)
-      - [Centered Kernel Alignment (cKA)](#centered-kernel-alignment-cka)
+- [Covariance Measures](#covariance-measures)
+  - [Uncentered Kernel](#uncentered-kernel)
+  - [Centered Kernel](#centered-kernel)
+    - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic)
+    - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd)
+- [Correlation Measures](#correlation-measures)
+  - [Uncentered Kernel](#uncentered-kernel-1)
+    - [Kernel Alignment (KA)](#kernel-alignment-ka)
+  - [Uncentered Kernel](#uncentered-kernel-2)
+    - [Centered Kernel Alignment (cKA)](#centered-kernel-alignment-cka)
+- [Ideas](#ideas)
 
 
 ---
@@ -96,3 +96,12 @@ $$\rho(\mathbf{X}, \mathbf{Y})
 **In the Literature**
 
 * Centered Kernel Alignment
+
+---
+
+## Ideas
+
+**What happens when?**
+
+* HS Norm of Noisy Matrix
+* HS Norm of PCA components

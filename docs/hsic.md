@@ -32,7 +32,6 @@
   - [Applications](#applications)
   - [Textbooks](#textbooks)
   - [Useful Formulas](#useful-formulas)
-  - [Frobenius Norm (or Hilbert-Schmidt Norm) a matrix](#frobenius-norm-or-hilbert-schmidt-norm-a-matrix)
 
 ---
 
@@ -152,60 +151,6 @@ There are many benefits to using this measure which is why it is often used so w
 $$\rho_{xy} = \frac{C_{xy}}{\sigma_x \sigma_y}$$
 
 
-
----
-### Summarizing Multi-Dimensional Information
-
-Let's have the two distributions $\mathcal{X} \in \mathbb{R}^{D_x}$ and $\mathcal{Y} \in \mathbb{R}^{D_y}$. Let's also assume that we can sample $(x,y)$ from $\mathbb{P}_{xy}$. We can capture the second order dependencies between $X$ and $Y$ by constructing a covariance matrix in the feature space defined as:
-
-$$C_{\mathbf{xy}} \in \mathbb{R}^{D \times D}$$
-
-We can use the Hilbert-Schmidt Norm (HS-Norm) as a statistic to effectively summarize content within this covariance matrix. It's defined as:
-
-$$||C_{xy}||_{\mathcal{F}}^2 = \sum_i \lambda_i^2 = \text{tr}\left[ C_{xy}^\top C_{xy} \right]$$
- 
- Note that this term is zero iff $X$ and $Y$ are independent and greater than zero otherwise. Since the covariance matrix is a second-order measure of the relations, we can only summarize the the second order relation information. But at the very least, we now have a scalar value that summarizes the structure of our data.
-
- 
-
-<details>
-<summary>
-    <font color="blue">Code
-    </font>
-</summary>
-
-This is very easy to compute in practice. One just needs to calculate the Frobenius Norm (Hilbert-Schmidt Norm) of a covariance matrix This boils down to computing the trace of the matrix multiplication of two matrices: $tr(C_{xy}^\top C_{xy})$. So in algorithmically that is:
-
-```python
-hsic_score = np.sqrt(np.trace(C_xy.T * C_xy))
-```
-We can make this faster by using the `sum` operation
-
-```python
-# Numpy
-hsic_score = np.sqrt(np.sum(C_xy * C_xy))
-# PyTorch
-hsic_score = (C_xy * C_xy).sum().sum()
-```
-
-**Refactor**
-
-There is a built-in function to be able to to speed up this calculation by a magnitude.
-
-```python
-hs_score = np.linalg.norm(C_xy, ord='fro')
-```
-
-and in PyTorch
-
-```python
-hs_score = torch.norm(C_xy, p='fro)
-```
-</details>
-
-And also just like the correlation, we can also do a normalization scheme that allows us to have an interpretable scalar value. This is similar to the correlation coefficient except it can now be applied to multi-dimensional data.
-
-$$\rho_\mathbf{xy} = \frac{ ||C_{\mathbf{xy}}||_\mathcal{F}^2}{||C_\mathbf{xx}||_{\mathcal{F}} ||C_\mathbf{yy}||_{\mathcal{F}}}$$
 
 ---
 
@@ -562,35 +507,3 @@ $$
 A_c(K_{c1}, K_{c2}) &= \frac{\langle K_{c1}, K_{c2} \rangle_{F}}{\sqrt{\langle K_{c1}, K_{c1} \rangle_{F}\langle K_{c2}, K_{c2} \rangle_{F}}}
 \end{aligned}
 $$
-### Frobenius Norm (or Hilbert-Schmidt Norm) a matrix
-$$
-\begin{aligned}
-||A|| &= \sqrt{\sum_{i,j}|a_{ij}|^2} \\
-&= \sqrt{\text{tr}(A^\top A)} \\
-&= \sqrt{\sum_{i=1}\lambda_i^2}
-\end{aligned}$$
-
-
-<!-- <details> -->
-<summary>
-    <font color="black">Details
-    </font>
-</summary>
-
-Let $A=U\Sigma V^\top$ be the Singular Value Decomposition of A. Then
-
-$$||A||_{F}^2 = ||\Sigma||_F^2 = \sum_{i=1}^r \lambda_i^2$$
-
-If $\lambda_i^2$ are the eigenvalues of $AA^\top$ and $A^\top A$, then we can show 
-
-$$
-\begin{aligned}
-||A||_F^2 &= tr(AA^\top) \\
-&= tr(U\Lambda V^\top V\Lambda^\top U^\top) \\
-&= tr(\Lambda \Lambda^\top U^\top U) \\
-&= tr(\Lambda \Lambda^\top) \\
-&= \sum_{i}\lambda_i^2
-\end{aligned}
-$$
-
-<!-- </details> -->

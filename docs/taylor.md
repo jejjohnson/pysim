@@ -1,10 +1,41 @@
 # Taylor Diagram
 
+- [Motivation](#motivation)
+  - [Questions](#questions)
+  - [Current Ways](#current-ways)
+- [Cosine Similarity](#cosine-similarity)
+- [Law of Cosines](#law-of-cosines)
 - [Taylor Diagram](#taylor-diagram)
-  - [Cosine Similarity](#cosine-similarity)
-  - [Law of Cosines](#law-of-cosines)
-  - [Taylor Diagram](#taylor-diagram-1)
-  - [Example](#example)
+- [Example](#example)
+- [Information Theory Diagram](#information-theory-diagram)
+
+---
+
+## Motivation
+
+Visualizations:
+* help find similarities between outputs
+* stats are great, but visual uncertainty quantification
+
+### Questions
+
+* Which model is more **similar** to the reference/observations?
+* Should we look at correlations across seasons or latitudes?
+* Are there large discrepancies in the different outputs
+
+### Current Ways
+
+* **Trend Plots** often do not expose the comparison aspects...
+* **Scatter** plots become impractical for many outputs
+* **Parallel Coordinate** Plots are more practical, but only certain pairwise comparisons are possible
+* **Plots per ensemble** - possible but it can be super cluttered
+* **Taylor Diagram** - visualize several statistics simultaneously in a statistical metric space.
+
+**Specific Statistics**
+
+* Mean, Variance, Correlation
+* Box Plots (and variations)
+
 
 ---
 
@@ -46,3 +77,7 @@ So, the important quantities needed to be able to plot points on the Taylor diag
 </p>
 
 We see that the points are on top of each other. Makes sense seeing as how all of the other measures were also equivalent.
+
+---
+
+## Information Theory Diagram

@@ -1,6 +1,39 @@
 # RV Coefficient
 
-**Notation**
+* Author: J. Emmanuel Johnson
+* Email: jemanjohnson34@gmail.com
+* Lab: [Colab Notebook](https://colab.research.google.com/drive/19bJd_KNTSThZcxP1vnQOVjTLTOFLS9VG)
+
+---
+
+- [Notation](#notation)
+- [Single Variables](#single-variables)
+  - [Mean, Expectation](#mean-expectation)
+    - [Empirical Estimate](#empirical-estimate)
+  - [Variance, $\mathbb{R}$](#variance-mathsemanticsmrowmi-mathvariant%22double-struck%22rmimrowannotation-encoding%22applicationx-tex%22mathbbrannotationsemanticsmathr)
+    - [Empirical Estimate](#empirical-estimate-1)
+  - [Covariance](#covariance)
+    - [Empirical Estimate](#empirical-estimate-2)
+  - [Correlation](#correlation)
+    - [Empirical Estimate](#empirical-estimate-3)
+- [Multi-Dimensional](#multi-dimensional)
+- [Covariance](#covariance-1)
+  - [Single Variable](#single-variable)
+    - [Empirical Estimation](#empirical-estimation)
+  - [Multivariate Covariance](#multivariate-covariance)
+  - [Empirical Cross-Covariance](#empirical-cross-covariance)
+  - [Linear Kernel](#linear-kernel)
+  - [Summarizing Multi-Dimensional Information](#summarizing-multi-dimensional-information)
+  - [Hilbert-Schmidt Norm](#hilbert-schmidt-norm)
+  - [RV Coefficient - $\rho$V](#rv-coefficient---mathsemanticsmrowmi%cf%81mimrowannotation-encoding%22applicationx-tex%22rhoannotationsemanticsmath%cf%81v)
+  - [RV Coefficient - RV (feature/primal space, $\mathbb{R}^D$)](#rv-coefficient---rv-featureprimal-space-mathsemanticsmrowmsupmi-mathvariant%22double-struck%22rmimidmimsupmrowannotation-encoding%22applicationx-tex%22mathbbrdannotationsemanticsmathrd)
+  - [RV Coefficient - RV (samples/dual space, $\mathbb{R}^N$)](#rv-coefficient---rv-samplesdual-space-mathsemanticsmrowmsupmi-mathvariant%22double-struck%22rmiminmimsupmrowannotation-encoding%22applicationx-tex%22mathbbrnannotationsemanticsmathrn)
+  - [](#)
+- [Supplementary](#supplementary)
+
+---
+
+## Notation
 
 * $\mathbf{X} \in \mathbb{R}^{N \times D_\mathbf{x}}$ are samples from a multidimentionsal r.v. $\mathcal{X}$
 * $\mathbf{X} \in \mathbb{R}^{N \times D_\mathbf{y}}$ are samples from a multidimensional r.v. $\mathcal{Y}$
@@ -15,15 +48,83 @@
 
 ---
 
-## Covariance
+## Single Variables
 
-$$C(X,Y)=\mathbb{E}\left((X-\mu_x)(Y-\mu_y) \right)$$
+Let's consider a single variable $X \in \mathbb{R}^{N \times 1}$ which represents a set of samples of a single feature. 
+
+* Mean
+* Variance
+* Covariance
+* Correlation
+* Visualize
+  * Scatter Plots
+  * Taylor Diagram
+* Root Mean Squared Error
+
+### Mean, Expectation
+
+The first order measurement is the mean. This is the expected/average value that we would expect from a r.v.. This results in a scalar value
+
+
+#### Empirical Estimate
+
+$$\mu(x)=\frac{1}{N}\sum_{i=1}x_i$$
+
+### Variance, $\mathbb{R}$
+
+The first measure we need to consider is the variance. This is a measure of spreadcan be used for a 
+
+
+#### Empirical Estimate
+
+
+$$
+\begin{aligned}
+\sigma_x^2 
+&= \frac{1}{n-1} \sum_{i=1}^N(x_i-x_\mu)(x_i-x_\mu) \\
+&= \frac{1}{n-1} \sum_{i=1}^N(x_i-x_\mu)^2
+\end{aligned}
+$$
 
 <details>
 <summary>
-    <font color="black">Alternative Formulations
+    <font color="blue">Code
     </font>
 </summary>
+
+We can expand the terms in the parenthesis like normally. Then we take the expectation of each of the terms individually.
+
+```python
+# remove mean from data
+X_mu = X.mean(axis=0)
+
+# ensure it is 1D
+var = (X - X_mu[:, None]).T @ (X - X_mu[:, None])
+```
+
+</details>
+
+---
+
+### Covariance
+
+
+The first measure we need to consider is the covariance. This can be used for a single variable $X \in \mathbb{R}^{N \times 1}$ which represents a set of samples of a single feature. We can compare the r.v. $X$ with another r.v. $Y \in \mathbb{R}^{N \times 1}$. the covariance, or the cross-covariance between multiple variables $X,Y$. This results in a scalar value , $\mathbb{R}$. We can write this as:
+
+$$
+\begin{aligned}
+C_{XY}(X,Y) &= \mathbb{E}\left[(X-\mu_x)(Y-\mu_y) \right] \\
+&= \mathbb{E}[XY] - \mu_X\mu_Y
+\end{aligned}
+$$
+
+<details>
+<summary>
+    <font color="red">Proof
+    </font>
+</summary>
+
+We can expand the terms in the parenthesis like normally. Then we take the expectation of each of the terms individually.
 
 $$
 \begin{aligned}
@@ -35,12 +136,92 @@ C(X,Y) &= \mathbb{E}\left((X-\mu_x)(Y-\mu_y) \right) \\
 $$
 </details>
 
-* Measures Dependence
-* Unbounded, $(-\infty,\infty)$
-* Isotropic scaling
-* Units depend on inputs
+#### Empirical Estimate
 
-### Empirical Covariance
+We can compare the r.v. $X$ with another r.v. $Y \in \mathbb{R}^{N \times 1}$. the covariance, or the cross-covariance between multiple variables $X,Y$. We can write this as:
+
+$$\sigma(x,y) = \frac{1}{n-1} \sum_{i=1}^N (x_i - x_\mu)(y_i - y_\mu)$$
+
+<details>
+<summary>
+    <font color="blue">Code
+    </font>
+</summary>
+
+```python
+c_xy = X.T @ Y
+```
+</details>
+
+---
+
+### Correlation
+
+
+This results in a scalar value $\mathbb{R}$.
+
+$$\rho(x,y)=\frac{\sigma(x,y)}{\sigma_x \sigma_y}$$
+
+#### Empirical Estimate
+
+
+---
+
+## Multi-Dimensional
+
+* Mean
+* Variance, Covariance
+* Correlation (RV Coefficient)
+* Summarizing Information (HS Norm)
+* Visualization
+  * Scatter Plot
+  * Correlation Plot
+  * Taylor Diagram
+
+---
+
+## Covariance
+
+---
+
+### Single Variable
+
+The first measure we need to consider is the covariance. This can be used for a single variable $X \in \mathbb{R}^{N \times 1}$ which represents a set of samples of a single feature. We can compare the r.v. $X$ with another r.v. $Y \in \mathbb{R}^{N \times 1}$. the covariance, or the cross-covariance between multiple variables $X,Y$. We can write this as:
+
+$$
+\begin{aligned}
+C_{XY}(X,Y) &= \mathbb{E}\left[(X-\mu_x)(Y-\mu_y) \right] \\
+&= \mathbb{E}[XY] - \mu_X\mu_Y
+\end{aligned}
+$$
+
+<details>
+<summary>
+    <font color="red">Proof
+    </font>
+</summary>
+
+We can expand the terms in the parenthesis like normally. Then we take the expectation of each of the terms individually.
+
+$$
+\begin{aligned}
+C(X,Y) &= \mathbb{E}\left((X-\mu_x)(Y-\mu_y) \right) \\
+&= \mathbb{E}\left(XY - \mu_xY - X\mu_y + \mu_x\mu_y \right) \\
+&=  \mathbb{E}(XY) - \mu_x  \mathbb{E}(X) -  \mathbb{E}(X)\mu_y + \mu_x\mu_y \\
+&=  \mathbb{E}(XY) - \mu_x\mu_y
+\end{aligned}
+$$
+</details>
+
+This results in a scalar value which represents the similarity between the samples. There are some key observations of this measure.
+
+* When $\in \mathbb{R}^{N \times 1}$, the result is a scalar value.
+* It is a measure of the joint variability between the datasets
+* It is difficult to interpret because it can range from $-\infty$ to $\infty$. 
+* The units are dependent upon the inputs. 
+* It is affected by isotropic scaling
+
+#### Empirical Estimation
 
 This shows the joint variation of all pairs of random variables.
 
@@ -62,6 +243,9 @@ c_xy = X.T @ X
 * A completely diagonal covariance matrix means that all features are uncorrelated (orthogonal to each other).
 * Diagonal covariances are useful for learning, they mean non-redundant features!
 
+---
+
+### Multivariate Covariance
 
 ### Empirical Cross-Covariance 
 
@@ -100,6 +284,65 @@ K_xy = X @ X.T
 * A completely diagonal linear kernel (Gram) matrix means that all examples are uncorrelated (orthogonal to each other).
 * Diagonal kernels are useless for learning: no structure found in the data.
 
+
+---
+
+
+---
+### Summarizing Multi-Dimensional Information
+
+Let's have the two distributions $\mathcal{X} \in \mathbb{R}^{D_x}$ and $\mathcal{Y} \in \mathbb{R}^{D_y}$. Let's also assume that we can sample $(x,y)$ from $\mathbb{P}_{xy}$. We can capture the second order dependencies between $X$ and $Y$ by constructing a covariance matrix in the feature space defined as:
+
+$$C_{\mathbf{xy}} \in \mathbb{R}^{D \times D}$$
+
+We can use the Hilbert-Schmidt Norm (HS-Norm) as a statistic to effectively summarize content within this covariance matrix. It's defined as:
+
+$$||C_{xy}||_{\mathcal{F}}^2 = \sum_i \lambda_i^2 = \text{tr}\left[ C_{xy}^\top C_{xy} \right]$$
+ 
+ Note that this term is zero iff $X$ and $Y$ are independent and greater than zero otherwise. Since the covariance matrix is a second-order measure of the relations, we can only summarize the the second order relation information. But at the very least, we now have a scalar value that summarizes the structure of our data.
+
+ 
+
+<details>
+<summary>
+    <font color="blue">Code
+    </font>
+</summary>
+
+This is very easy to compute in practice. One just needs to calculate the Frobenius Norm (Hilbert-Schmidt Norm) of a covariance matrix This boils down to computing the trace of the matrix multiplication of two matrices: $tr(C_{xy}^\top C_{xy})$. So in algorithmically that is:
+
+```python
+hsic_score = np.sqrt(np.trace(C_xy.T * C_xy))
+```
+We can make this faster by using the `sum` operation
+
+```python
+# Numpy
+hsic_score = np.sqrt(np.sum(C_xy * C_xy))
+# PyTorch
+hsic_score = (C_xy * C_xy).sum().sum()
+```
+
+**Refactor**
+
+There is a built-in function to be able to to speed up this calculation by a magnitude.
+
+```python
+hs_score = np.linalg.norm(C_xy, ord='fro')
+```
+
+and in PyTorch
+
+```python
+hs_score = torch.norm(C_xy, p='fro)
+```
+</details>
+
+And also just like the correlation, we can also do a normalization scheme that allows us to have an interpretable scalar value. This is similar to the correlation coefficient except it can now be applied to multi-dimensional data.
+
+$$\rho_\mathbf{xy} = \frac{ ||C_{\mathbf{xy}}||_\mathcal{F}^2}{||C_\mathbf{xx}||_{\mathcal{F}} ||C_\mathbf{yy}||_{\mathcal{F}}}$$
+
+
 ---
 
 ### Hilbert-Schmidt Norm
@@ -119,16 +362,6 @@ $$
 
 **Observations**
 * HSIC norm of the covariance only detects second order relationships. More complex (higher-order, nonlinear) relations cannot be captured
-
----
-
-## Correlation
-
----
-
-### Correlation Coefficient - $\rho$
-
-$$\rho(X, Y) = \frac{C(X,Y)}{\sigma_x \sigma_y}$$
 
 ---
 
@@ -173,3 +406,15 @@ $$
 ---
 
 ### 
+
+
+---
+
+## Supplementary
+
+* Common Statistical Tests are Linear Models (or: How to Teach Stats) - Jonas Kristoffer Lindelov - [notebook](https://eigenfoo.xyz/tests-as-linear/) | [rmarkdown](https://lindeloev.github.io/tests-as-linear/)
+* Correlation vs Regression - Asim Jana - [blog](https://www.datasciencecentral.com/profiles/blogs/difference-between-correlation-and-regression-in-statistics)
+* RealPython
+  * Numpy, SciPy and Pandas: Correlation with Python - [blog](https://realpython.com/numpy-scipy-pandas-correlation-python/)
+* Correlation and Lag for Signals - [notebook](https://currents.soest.hawaii.edu/ocn_data_analysis/_static/SEM_EDOF.html)
+* [Understanding the Covariance Matrix](https://datascienceplus.com/understanding-the-covariance-matrix/)
