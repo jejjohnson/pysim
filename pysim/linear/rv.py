@@ -41,7 +41,8 @@ class LinearRV(BaseEstimator):
     def __init__(
         self,
         random_state: Optional[int] = None,
-        center: Optional[int] = True,
+        center: Optional[int] = False,
+        features: bool = True,
         subsample: Optional[int] = None,
         bias: bool = True,
     ):
@@ -61,8 +62,8 @@ class LinearRV(BaseEstimator):
 
         # Check samples are the same
         assert (
-            X.shape[0] == Y.shape[0]
-        ), f"Samples of X ({X.shape[0]}) and Samples of Y ({Y.shape[0]}) are not the same"
+            X.shape[1] == Y.shape[1]
+        ), f"Samples of X ({X.shape[1]}) and Samples of Y ({Y.shape[1]}) are not the same"
 
         self.n_samples = X.shape[0]
         self.dx_dimensions = X.shape[1]
@@ -76,26 +77,30 @@ class LinearRV(BaseEstimator):
         self.X_train_ = X
         self.Y_train_ = Y
 
-        # Calculate Kernel Matrices
-        K_x = linear_kernel(X,)
-        K_y = linear_kernel(Y,)
+        # compute covariance
+        C_xy = covariance(X, Y)
+        C_xx = covariance(X)
+        C_yy = covariance(Y)
 
         # Center Kernel
         # H = np.eye(n_samples) - (1 / n_samples) * np.ones(n_samples)
         # K_xc = K_x @ H
         if self.center == True:
-            K_x = KernelCenterer().fit_transform(K_x)
-            K_y = KernelCenterer().fit_transform(K_y)
+            C_xy = KernelCenterer().fit_transform(C_xy)
+            C_xy = KernelCenterer().fit_transform(C_xy)
+            C_xy = KernelCenterer().fit_transform(C_xy)
 
-        self.K_x = K_x
-        self.K_y = K_y
+        self.C_xy = C_xy
+        self.C_xx = C_xx
+        self.C_yy = C_yy
 
         # Compute covariance value
-        self.hsic_value = np.sum(K_x * K_y)
+        self.C_xy_norm = np.sum(C_xy ** 2)
 
         # Compute normalization
-        self.K_x_norm = np.linalg.norm(self.K_x)
-        self.K_y_norm = np.linalg.norm(self.K_y)
+        self.C_xx_norm = np.linalg.norm(C_xx)
+        self.C_yy_norm = np.linalg.norm(C_yy)
+
         return self
 
     def score(
@@ -106,21 +111,45 @@ class LinearRV(BaseEstimator):
         We will use the target kernel alignment algorithm as a score
         function. This can be used to find the best parameters."""
 
-        if normalized == True:
+        return self.C_xy_norm / self.C_xx_norm / self.C_yy_norm
 
-            # Compute and cache normalized coefficients
-            return self.hsic_value / self.K_x_norm / self.K_y_norm
 
-        elif normalized == False:
+# TODO: Testing - check size constraint inputs to fail
+# TODO: Testing - check size constraint outputs
+# TODO: Testing - self covariance v.s. cross covariance
+# TODO: Testing - check 1D case
+# TODO: Testing - check 2D case
+# TODO: Testing - check 3D case fails
+# TODO: Testing - check bias
+# TODO: Documentation
 
-            if self.bias:
-                self.hsic_bias = 1 / (self.n_samples ** 2)
-            else:
-                self.hsic_bias = 1 / (self.n_samples - 1) ** 2
 
-            return self.hsic_bias * self.hsic_value
-        else:
-            raise ValueError(f"Unrecognized normalize argument: {normalized}")
+def covariance(
+    X: np.ndarray, Y: Optional[np.ndarray] = None, bias: bool = False
+) -> np.ndarray:
+
+    if Y is None:
+        Y = X
+
+    # check space arguments
+    msg = f"# X features '{X.shape[1]}' is not equal to # X features '{Y.shape[1]}'."
+    assert X.shape[1] == Y.shape[1], msg
+
+    # Remove the Mean
+    X -= np.mean(X, axis=0)[None, :]
+    Y -= np.mean(Y, axis=0)[None, :]
+
+    # calculate covariance
+    covar = X.T @ Y
+
+    # normalize data
+    if bias == True:
+        covar *= 1 / (covar.shape[0] - 1)
+
+    else:
+        covar *= 1 / covar.shape[0]
+
+    return covar
 
 
 def demo():
@@ -128,13 +157,13 @@ def demo():
     # fix random seed
     np.random.seed(123)
     n_samples = 1000
-    n_features = 2
+    n_features = 50
     A = np.random.rand(n_features, n_features)
 
     X = np.random.randn(n_samples, n_features)
     Y = X @ A
 
-    print("Centered Method:")
+    print("RV Method (centered):")
     # initialize method
     clf_linear_rv = LinearRV()
 
@@ -142,48 +171,12 @@ def demo():
     clf_linear_rv.fit(X, Y)
 
     # calculate scores
-    rv_score = clf_linear_rv.score(X, Y, normalized=False)
-    nrv_score = clf_linear_rv.score(X, Y, normalized=True)
+    rv_score = clf_linear_rv.score(X, Y)
 
-    print(f"RV Score: {rv_score:.6f}\nNormalized RV Score: {nrv_score:.6f}.")
-
-    print("Centered Method (Features):")
-    # initialize method
-    clf_linear_rv = LinearRV()
-
-    # fit method
-    clf_linear_rv.fit(X.T, Y.T)
-
-    # calculate scores
-    rv_score = clf_linear_rv.score(X, Y, normalized=False)
-    nrv_score = clf_linear_rv.score(X, Y, normalized=True)
-    print(f"RV Score: {rv_score:.6f}\nNormalized RV Score: {nrv_score:.6f}.")
-
-    print("\nUncentered Method:")
-    # initialize method
-    clf_linear_rv = LinearRV(center=False)
-
-    # fit method
-    clf_linear_rv.fit(X, Y)
-
-    # calculate scores
-    rv_score = clf_linear_rv.score(X, Y, normalized=False)
-    nrv_score = clf_linear_rv.score(X, Y, normalized=True)
-
-    print(f"RV Score: {rv_score:.6f}\nNormalized RV Score: {nrv_score:.6f}.")
-
-    print("\nUncentered Method (Features):")
-    # initialize method
-    clf_linear_rv = LinearRV(center=False)
-
-    # fit method
-    clf_linear_rv.fit(X.T, Y.T)
-
-    # calculate scores
-    rv_score = clf_linear_rv.score(X, Y, normalized=False)
-    nrv_score = clf_linear_rv.score(X, Y, normalized=True)
-
-    print(f"RV Score: {rv_score:.6f}\nNormalized RV Score: {nrv_score:.6f}.")
+    print(f"RV Score: {rv_score:.6f}")
+    print(f"||C_xy||: {clf_linear_rv.C_xy_norm:.6f}")
+    print(f"||C_xx||: {clf_linear_rv.C_xx_norm:.6f}")
+    print(f"||C_xx||: {clf_linear_rv.C_yy_norm:.6f}")
 
 
 if __name__ == "__main__":
