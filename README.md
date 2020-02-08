@@ -1,17 +1,18 @@
 # Similarity Measures using Python
 
-Author: J. Emmanuel Johnson
-Repo: [https://github.com/jejjohnson/pysim.git](https://github.com/jejjohnson/pysim.git)
+* Authors: J. Emmanuel Johnson, Kristoffer Wickstrøm
+* Repo: [https://github.com/jejjohnson/pysim.git](https://github.com/jejjohnson/pysim.git)
+* Website: [jejjohnson.github.io/pysim](https://jejjohnson.github.io/pysim)
 
 ---
 
-### Description
+## Description
 
 My package where I do code for different similarity measures. This repository will be didactic and will focus on readability and understanding the implementations rather than the speed or optimization; so it will be comment-heavy.
 
 ---
 
-### Installation 
+## Installation 
 
 1. Make sure [miniconda] is installed.
 2. Clone the git repository.
