@@ -136,6 +136,23 @@ c_xy = X.T @ Y
 
 </details>
 
+**Linear Kernel**
+
+This measures the covariance between samples.
+
+$$K_{xx} = X X^\top$$
+
+<details>
+<summary>
+    <font color="blue">Code
+    </font>
+</summary>
+
+```python
+K_xy = X @ X.T
+```
+</details>
+
 ---
 ### Correlation
 

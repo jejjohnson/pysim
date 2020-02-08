@@ -1,13 +1,14 @@
 # Taylor Diagram
 
-- [Motivation](#motivation)
-  - [Questions](#questions)
-  - [Current Ways](#current-ways)
-- [Cosine Similarity](#cosine-similarity)
-- [Law of Cosines](#law-of-cosines)
 - [Taylor Diagram](#taylor-diagram)
-- [Example](#example)
-- [Information Theory Diagram](#information-theory-diagram)
+  - [Motivation](#motivation)
+    - [Questions](#questions)
+    - [Current Ways](#current-ways)
+  - [Cosine Similarity](#cosine-similarity)
+  - [Law of Cosines](#law-of-cosines)
+  - [Taylor Diagram](#taylor-diagram-1)
+  - [Example](#example)
+  - [Information Theory Diagram](#information-theory-diagram)
 
 ---
 
@@ -42,6 +43,14 @@ Visualizations:
 ## Cosine Similarity
 
 $$A \cdot B = ||A|| \; ||B|| \; cos \theta$$
+
+$$
+\begin{aligned}
+\text{Similarity}
+&= cos \theta \\
+&= \frac{\mathbf{A\cdot B}}{\mathbf{||A||\;||B||}} \\
+&= \frac{\sum_{i=1}^N A_i B_i}{\sqrt{\sum_{i=1}^N A_i^2} \sqrt{ \sum_{i=1}^N B_i^2}}
+\end{aligned}$$
 
 
 ---

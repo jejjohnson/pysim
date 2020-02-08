@@ -4,23 +4,22 @@ My projects involve trying to compare the outputs of different climate models. T
 
 Another way to measure similarity would be in the family of Information Theory Measures (ITMs). Instead of directly measuring first-order output statistics, these methods summarize the information via a probability distribution function (PDF) of the dataset. These can measure non-linear relationships and are naturally multivariate that offers solutions to the shortcomings of the standard methods. I would like to explore this and see if this is a useful way of summarizing information.
 
-- [Example Data](#example-data)
-- [Standard Methods](#standard-methods)
-  - [Covariance](#covariance)
-    - [Example](#example)
-  - [Correlation](#correlation)
-    - [Example](#example-1)
-  - [Root Mean Squared](#root-mean-squared)
-    - [Example](#example-2)
-- [Information Theory](#information-theory)
-  - [Entropy](#entropy)
-  - [Mutual Information](#mutual-information)
-    - [Example](#example-3)
-    - [Normalized Mutual Information](#normalized-mutual-information)
-  - [Variation of Information](#variation-of-information)
-  - [RVI-Based Diagram](#rvi-based-diagram)
-    - [Example](#example-4)
-  - [VI-Based Diagram](#vi-based-diagram)
+- [Variation of Information](#variation-of-information)
+  - [Example Data](#example-data)
+  - [Standard Methods](#standard-methods)
+    - [Covariance](#covariance)
+      - [Example](#example)
+      - [Example](#example-1)
+      - [Example](#example-2)
+  - [Information Theory](#information-theory)
+    - [Entropy](#entropy)
+    - [Mutual Information](#mutual-information)
+      - [Example](#example-3)
+      - [Normalized Mutual Information](#normalized-mutual-information)
+    - [Variation of Information](#variation-of-information-1)
+    - [RVI-Based Diagram](#rvi-based-diagram)
+      - [Example](#example-4)
+    - [VI-Based Diagram](#vi-based-diagram)
 
 ---
 
@@ -88,13 +87,7 @@ As you can see, we have the same statistics.
 
 ---
 
-### Correlation
 
-This is the normalized version of the covariance measured mentioned above. This is done by dividing the covariance by the product of the standard deviation of the two samples X and Y. So the forumaltion is:
-
-$$\rho(X, Y) = \frac{C(X,Y)}{\sigma_x \sigma_y}$$
-
-With this normalization, we now have a measure that is bounded between -1 and 1. This makes it much more interpretable and also invariant to isotropic scaling, $\rho(X,Y)=\rho(\alpha X, \beta Y)$ where $\alpha, \beta \in \mathbb{R}^{+}$
 
 #### Example
 
@@ -105,12 +98,6 @@ With this normalization, we now have a measure that is bounded between -1 and 1.
 An easier number to interpret. But it will not distinguish the datasets.
 
 ---
-
-### Root Mean Squared
-
-This is a popular measure for measuring the errors between two datasets. More or less, it is a covariance measure that penalizes higher deviations between the datasets.
-
-$$RMSE(X,Y)=\sqrt{\frac{1}{N}\sum_{i=1}^N \left((x_i - \mu_x)-(y_i - \mu_i)\right)^2}$$
 
 #### Example
 

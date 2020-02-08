@@ -3,10 +3,11 @@
 
 ---
 
-- [Frobenius Norm (Hilbert-Schmidt Norm)](#frobenius-norm-hilbert-schmidt-norm)
-  - [Intiution](#intiution)
-  - [Formulation](#formulation)
-  - [Code](#code)
+- [Linear Algebra Tricks](#linear-algebra-tricks)
+  - [Frobenius Norm (Hilbert-Schmidt Norm)](#frobenius-norm-hilbert-schmidt-norm)
+    - [Intiution](#intiution)
+    - [Formulation](#formulation)
+    - [Code](#code)
 
 ---
 
@@ -16,6 +17,7 @@
 
 The Frobenius norm is the common matrix-based norm.
 
+---
 
 ### Formulation
 
@@ -27,9 +29,9 @@ $$
 \end{aligned}$$
 
 
-<!-- <details> -->
+<details>
 <summary>
-    <font color="black">Details
+    <font color="red">Proof
     </font>
 </summary>
 
@@ -49,27 +51,32 @@ $$
 \end{aligned}
 $$
 
-<!-- </details> -->
+</details>
 
-
+---
 
 ### Code
 
 **Eigenvalues**
 
 ```python
-f_norm = np.linalg.eigvals(X @ X.T).sum()
+sigma_xy = covariance(X, Y)
+eigvals = np.linalg.eigvals(sigma_xy)
+f_norm = np.sum(eigvals ** 2)
 ```
 
 **Trace**
 
 ```python
+sigma_xy = covariance(X, Y)
 f_norm = np.trace(X @ X.T) ** 2
 ```
 
 **Einsum**
 
 ```python
+X -= np.mean(X, axis=1)
+Y -= np.mean(Y, axis=1)
 f_norm = np.einsum('ij,ji->', X @ X.T)
 ```
 

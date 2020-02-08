@@ -1,20 +1,27 @@
 # Maximum Mean Discrepancy (MMD)
 
-> The Maximum Mean Discrepency (MMD) measurement is a distance measure between feature means. 
+> The Maximum Mean Discrepency (MMD) measurement is a distance measure between feature means.
 
 ---
 
-- [Idea](#idea)
-- [Formulation](#formulation)
-  - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary)
-  - [**<summary><font color="blue">Code</font></summary>**](#summaryfont-color%22blue%22codefontsummary)
-- [Empirical Estimate](#empirical-estimate)
-- [Equivalence](#equivalence)
-  - [KL-Divergence](#kl-divergence)
-  - [Variation of Information](#variation-of-information)
-  - [HSIC](#hsic)
-  - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary-1)
-- [Resources](#resources)
+- [Maximum Mean Discrepancy (MMD)](#maximum-mean-discrepancy-mmd)
+  - [Idea](#idea)
+  - [Formulation](#formulation)
+    - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary)
+    - [**<summary><font color="blue">Code</font></summary>**](#summaryfont-color%22blue%22codefontsummary)
+  - [Kernel Trick](#kernel-trick)
+  - [Empirical Estimate](#empirical-estimate)
+  - [Equivalence](#equivalence)
+    - [KL-Divergence](#kl-divergence)
+    - [Variation of Information](#variation-of-information)
+    - [HSIC](#hsic)
+    - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary-1)
+  - [Supplementary Material](#supplementary-material)
+    - [Feature Map](#feature-map)
+    - [Function Class](#function-class)
+    - [Kernels](#kernels)
+    - [Reproducing Kernel Hilbert Space Notation](#reproducing-kernel-hilbert-space-notation)
+  - [Resources](#resources)
 
 ---
 
@@ -93,6 +100,26 @@ mmd_est = c1 * A + c2 * B - 2 * c3 * C
 
 ---
 
+## Kernel Trick
+
+Let $k(X,Y) = \langle \varphi(x), \varphi(y) \rangle_\mathcal{H}$:
+
+$$
+\begin{aligned}
+\text{MMD}^2(P, Q) 
+&=
+|| \mathbb{E}_{X \sim P} \varphi(X) - \mathbb{E}_{Y \sim P} \varphi(Y) ||^2_\mathcal{H} \\
+&=
+\langle \mathbb{E}_{X \sim P} \varphi(X), \mathbb{E}_{X' \sim P} \varphi(X')\rangle_\mathcal{H} +
+\langle \mathbb{E}_{Y \sim Q} \varphi(Y), \mathbb{E}_{Y' \sim Q} \varphi(Y')\rangle_\mathcal{H} -
+2 \langle \mathbb{E}_{X \sim P} \varphi(X), \mathbb{E}_{Y' \sim Q} \varphi(Y')\rangle_\mathcal{H}
+\end{aligned}
+$$
+
+**Source**: [Stackoverflow](https://stats.stackexchange.com/questions/276497/maximum-mean-discrepancy-distance-distribution)
+
+---
+
 ## Empirical Estimate
 
 $$
@@ -115,7 +142,7 @@ $$
 
 This has some alternative interpretation that is similar to the Kullback-Leibler Divergence. Remember, the MMD is the distance between the joint distribution $P=\mathbb{P}_{x,y}$ and the product of the marginals $Q=\mathbb{P}_x\mathbb{P}_y$. 
 
-$$\text{MMD}(P_{XY},P_X P_Y, \mathcal{H}_k)$$
+$$\text{MMD}(P_{XY},P_X P_Y, \mathcal{H}_k) = || \mu_{PQ} - \mu_{P}\mu_{Q}||$$
 
 This is similar to the KLD which has a similar interpretation in terms of the Mutual information: the difference between the joint distribution $P(x,y)$ and the product of the marginal distributions $p_x p_y$.
 
@@ -185,6 +212,68 @@ k\left((x,y),(x',y')\right) &= k(x,x')\,k(y,y') \\
 \end{aligned}
 $$
 
+---
+
+## Supplementary Material
+
+
+### Feature Map
+
+We have a function $\varphi(X)$ to map $\mathcal{X}$ to some feature space $\mathcal{F}$.
+
+$$\phi(X) = \left[ \cdots, \varphi_i(x), \cdots \right] \in N$$
+
+### Function Class
+
+Reproducing Kernel Hilbert Space $\mathcal{H}$ with kernel $k$.
+
+Evaluation functionals 
+
+$$f(x) = \langle k(x,\cdot), f \rangle$$
+
+We can compute means via linearity
+
+$$
+\begin{aligned}
+\mathbb{E}_{X \sim P} \left[ f(X) \right] 
+&=
+\mathbb{E}_{X \sim P} \left[ \langle k(x, \cdot), f \rangle  \right] \\
+&=
+\bigg\langle \mathbb{E}_{X \sim P} \left[   k(x, \cdot)\right], f   \bigg\rangle \\
+&=
+\langle \mu_P, f \rangle
+\end{aligned}
+$$
+
+And empirically
+
+$$
+\begin{aligned}
+\frac{1}{N} \sum_{i=1}^N f(x_i)
+&=
+\frac{1}{N} \sum_{i=1}^N \langle k(x, \cdot), f \rangle \\
+&=
+\bigg\langle \frac{1}{N} \sum_{i=1}^N k(x, \cdot), f   \bigg\rangle \\
+&=
+\langle \mu_X, f \rangle
+\end{aligned} 
+$$
+
+### Kernels
+
+This allows us to not have to explicitly calculate $\varphi(X)$. We just need an algorithm that calculates the dot product between them.
+
+$$\langle \varphi(X), \varphi(X') \rangle_\mathcal{F} = k(X, X')$$
+
+### Reproducing Kernel Hilbert Space Notation
+
+**Reproducing Property**
+
+$$\langle f, k(x,\cdot) \rangle = f(x)$$
+
+Equivalence between $\phi(x)$ and $k(x,\cdot)$.
+
+$$\langle k(x, \cdot), k(x', \cdot) \rangle = k(x, x')$$
 
 ---
 

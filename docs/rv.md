@@ -6,30 +6,33 @@
 
 ---
 
-- [Notation](#notation)
-- [Single Variables](#single-variables)
-  - [Mean, Expectation](#mean-expectation)
-    - [Empirical Estimate](#empirical-estimate)
-  - [Variance, $\mathbb{R}$](#variance-mathsemanticsmrowmi-mathvariant%22double-struck%22rmimrowannotation-encoding%22applicationx-tex%22mathbbrannotationsemanticsmathr)
-    - [Empirical Estimate](#empirical-estimate-1)
-  - [Covariance](#covariance)
-    - [Empirical Estimate](#empirical-estimate-2)
-  - [Correlation](#correlation)
-    - [Empirical Estimate](#empirical-estimate-3)
-- [Multi-Dimensional](#multi-dimensional)
-- [Covariance](#covariance-1)
-  - [Single Variable](#single-variable)
-    - [Empirical Estimation](#empirical-estimation)
-  - [Multivariate Covariance](#multivariate-covariance)
-  - [Empirical Cross-Covariance](#empirical-cross-covariance)
-  - [Linear Kernel](#linear-kernel)
-  - [Summarizing Multi-Dimensional Information](#summarizing-multi-dimensional-information)
-  - [Hilbert-Schmidt Norm](#hilbert-schmidt-norm)
-  - [RV Coefficient - $\rho$V](#rv-coefficient---mathsemanticsmrowmi%cf%81mimrowannotation-encoding%22applicationx-tex%22rhoannotationsemanticsmath%cf%81v)
-  - [RV Coefficient - RV (feature/primal space, $\mathbb{R}^D$)](#rv-coefficient---rv-featureprimal-space-mathsemanticsmrowmsupmi-mathvariant%22double-struck%22rmimidmimsupmrowannotation-encoding%22applicationx-tex%22mathbbrdannotationsemanticsmathrd)
-  - [RV Coefficient - RV (samples/dual space, $\mathbb{R}^N$)](#rv-coefficient---rv-samplesdual-space-mathsemanticsmrowmsupmi-mathvariant%22double-struck%22rmiminmimsupmrowannotation-encoding%22applicationx-tex%22mathbbrnannotationsemanticsmathrn)
-  - [](#)
-- [Supplementary](#supplementary)
+- [RV Coefficient](#rv-coefficient)
+  - [Notation](#notation)
+  - [Single Variables](#single-variables)
+    - [Mean, Expectation](#mean-expectation)
+      - [Empirical Estimate](#empirical-estimate)
+    - [Variance, $\mathbb{R}$](#variance-mathsemanticsmrowmi-mathvariant%22double-struck%22rmimrowannotation-encoding%22applicationx-tex%22mathbbrannotationsemanticsmathr)
+      - [Empirical Estimate](#empirical-estimate-1)
+    - [Covariance](#covariance)
+      - [Empirical Estimate](#empirical-estimate-2)
+    - [Correlation](#correlation)
+      - [Empirical Estimate](#empirical-estimate-3)
+      - [Root Mean Squared Error](#root-mean-squared-error)
+  - [Multi-Dimensional](#multi-dimensional)
+    - [Variance (Self-Covariance)](#variance-self-covariance)
+      - [Empirical Estimation](#empirical-estimation)
+    - [Covariance (Cross-Covariance)](#covariance-cross-covariance)
+      - [Empirical Estimation](#empirical-estimation-1)
+    - [Multivariate Covariance](#multivariate-covariance)
+    - [Empirical Cross-Covariance](#empirical-cross-covariance)
+    - [Summarizing Multi-Dimensional Information](#summarizing-multi-dimensional-information)
+      - [Frobenius Norm (Hilbert-Schmidt Norm)](#frobenius-norm-hilbert-schmidt-norm)
+      - [Feature Space](#feature-space)
+    - [RV Coefficient - $\rho$V](#rv-coefficient---mathsemanticsmrowmi%cf%81mimrowannotation-encoding%22applicationx-tex%22rhoannotationsemanticsmath%cf%81v)
+    - [RV Coefficient - RV (feature/primal space, $\mathbb{R}^D$)](#rv-coefficient---rv-featureprimal-space-mathsemanticsmrowmsupmi-mathvariant%22double-struck%22rmimidmimsupmrowannotation-encoding%22applicationx-tex%22mathbbrdannotationsemanticsmathrd)
+    - [RV Coefficient - RV (samples/dual space, $\mathbb{R}^N$)](#rv-coefficient---rv-samplesdual-space-mathsemanticsmrowmsupmi-mathvariant%22double-struck%22rmiminmimsupmrowannotation-encoding%22applicationx-tex%22mathbbrnannotationsemanticsmathrn)
+    - [](#)
+  - [Supplementary](#supplementary)
 
 ---
 
@@ -158,11 +161,27 @@ c_xy = X.T @ Y
 ### Correlation
 
 
-This results in a scalar value $\mathbb{R}$.
+This is the normalized version of the covariance measured mentioned above. This is done by dividing the covariance by the product of the standard deviation of the two samples X and Y.  
 
 $$\rho(x,y)=\frac{\sigma(x,y)}{\sigma_x \sigma_y}$$
 
+This results in a scalar value $\mathbb{R}$.
+
 #### Empirical Estimate
+
+So the forumaltion is:
+
+$$\rho(X, Y) = \frac{C(X,Y)}{\sigma_x \sigma_y}$$
+
+With this normalization, we now have a measure that is bounded between -1 and 1. This makes it much more interpretable and also invariant to isotropic scaling, $\rho(X,Y)=\rho(\alpha X, \beta Y)$ where $\alpha, \beta \in \mathbb{R}^{+}$
+
+---
+
+#### Root Mean Squared Error
+
+This is a popular measure for measuring the errors between two datasets. More or less, it is a covariance measure that penalizes higher deviations between the datasets.
+
+$$RMSE(X,Y)=\sqrt{\frac{1}{N}\sum_{i=1}^N \left((x_i - \mu_x)-(y_i - \mu_i)\right)^2}$$
 
 
 ---
@@ -180,20 +199,72 @@ $$\rho(x,y)=\frac{\sigma(x,y)}{\sigma_x \sigma_y}$$
 
 ---
 
-## Covariance
+### Variance (Self-Covariance)
 
----
-
-### Single Variable
-
-The first measure we need to consider is the covariance. This can be used for a single variable $X \in \mathbb{R}^{N \times 1}$ which represents a set of samples of a single feature. We can compare the r.v. $X$ with another r.v. $Y \in \mathbb{R}^{N \times 1}$. the covariance, or the cross-covariance between multiple variables $X,Y$. We can write this as:
+So now we are considering the case when we have multidimensional vectors. If we think of a variable $X \in \mathbb{R}^{N \times D}$ which represents a set of samples with multiple features. First let's consider the variance for a multidimensional variable. This is also known as the covariance because we are actually finding the cross-covariance between itself.
 
 $$
 \begin{aligned}
-C_{XY}(X,Y) &= \mathbb{E}\left[(X-\mu_x)(Y-\mu_y) \right] \\
+\text{Var}(X) 
+&= \mathbb{E}\left[(X-\mu_x)^2 \right] \\
+\end{aligned}
+$$
+
+
+<details>
+<summary>
+    <font color="red">Proof
+    </font>
+</summary>
+
+We can expand the terms in the parenthesis like normally. Then we take the expectation of each of the terms individually.
+
+$$
+\begin{aligned}
+\text{Var}(X) &= \mathbb{E}\left((X-\mu_x)(X-\mu_y) \right) \\
+&= \mathbb{E}\left(XX - \mu_XX - X\mu_X + \mu_X\mu_X \right) \\
+&=  \mathbb{E}(XX) - \mu_x  \mathbb{E}(X) -  \mathbb{E}(X)\mu_X + \mu_x\mu_X \\
+&=  \mathbb{E}(X^2) - \mu_X^2
+\end{aligned}
+$$
+</details>
+
+To simplify the notation, we can write this as:
+
+$$\sigma_X^2 = C_{XX}$$
+
+#### Empirical Estimation
+
+This shows the joint variation of all pairs of random variables.
+
+$$C_{xy} = X^\top X$$
+
+
+<details>
+<summary>
+    <font color="blue">Code
+    </font>
+</summary>
+
+```python
+c_xy = X.T @ X
+```
+</details>
+
+---
+
+### Covariance (Cross-Covariance)
+
+ We can compare the r.v. $X$ with another r.v. $Y \in \mathbb{R}^{N \times 1}$. the covariance, or the cross-covariance between multiple variables $X,Y$. We can write this as:
+
+$$
+\begin{aligned}
+\text{Var}(X) &= \mathbb{E}\left[(X-\mu_x)(Y-\mu_y) \right] \\
 &= \mathbb{E}[XY] - \mu_X\mu_Y
 \end{aligned}
 $$
+
+
 
 <details>
 <summary>
@@ -215,11 +286,6 @@ $$
 
 This results in a scalar value which represents the similarity between the samples. There are some key observations of this measure.
 
-* When $\in \mathbb{R}^{N \times 1}$, the result is a scalar value.
-* It is a measure of the joint variability between the datasets
-* It is difficult to interpret because it can range from $-\infty$ to $\infty$. 
-* The units are dependent upon the inputs. 
-* It is affected by isotropic scaling
 
 #### Empirical Estimation
 
@@ -264,22 +330,7 @@ c_xy = X.T @ Y
 ```
 </details>
 
-### Linear Kernel 
 
-This measures the covariance between samples.
-
-$$K_{xx} = X X^\top$$
-
-<details>
-<summary>
-    <font color="blue">Code
-    </font>
-</summary>
-
-```python
-K_xy = X @ X.T
-```
-</details>
 
 * A completely diagonal linear kernel (Gram) matrix means that all examples are uncorrelated (orthogonal to each other).
 * Diagonal kernels are useless for learning: no structure found in the data.
@@ -290,6 +341,27 @@ K_xy = X @ X.T
 
 ---
 ### Summarizing Multi-Dimensional Information
+
+
+#### Frobenius Norm (Hilbert-Schmidt Norm)
+
+
+We can also consider the case where the correlations can be measured between samples and not between features. So we can create cross product matrices: $\mathbf{W}_\mathbf{X}=\mathbf{XX}^\top \in \mathbb{R}^{N \times N}$ and $\mathbf{W}_\mathbf{Y}=\mathbf{YY}^\top \in \mathbb{R}^{N \times N}$. To measure the proximity, we can use the Hilbert-Schmidt (HS) norm, $||\cdot||_{F}$. 
+
+$$
+\begin{aligned}
+\langle {W}_\mathbf{X}, {W}_\mathbf{Y} \rangle 
+&= 
+tr \left( \mathbf{XX}^\top \mathbf{YY}^\top \right) \\
+&= 
+\sum_{i=1}^{D_x} \sum_{j=1}^{D_y} cov^2(\mathbf{X}_{d_i}, \mathbf{Y}_{d_j})
+\end{aligned}
+$$
+
+**Observations**
+* HSIC norm of the covariance only detects second order relationships. More complex (higher-order, nonlinear) relations cannot be captured
+
+#### Feature Space
 
 Let's have the two distributions $\mathcal{X} \in \mathbb{R}^{D_x}$ and $\mathcal{Y} \in \mathbb{R}^{D_y}$. Let's also assume that we can sample $(x,y)$ from $\mathbb{P}_{xy}$. We can capture the second order dependencies between $X$ and $Y$ by constructing a covariance matrix in the feature space defined as:
 
@@ -308,6 +380,9 @@ $$||C_{xy}||_{\mathcal{F}}^2 = \sum_i \lambda_i^2 = \text{tr}\left[ C_{xy}^\top 
     <font color="blue">Code
     </font>
 </summary>
+
+
+**Sample Space**
 
 This is very easy to compute in practice. One just needs to calculate the Frobenius Norm (Hilbert-Schmidt Norm) of a covariance matrix This boils down to computing the trace of the matrix multiplication of two matrices: $tr(C_{xy}^\top C_{xy})$. So in algorithmically that is:
 
@@ -345,23 +420,7 @@ $$\rho_\mathbf{xy} = \frac{ ||C_{\mathbf{xy}}||_\mathcal{F}^2}{||C_\mathbf{xx}||
 
 ---
 
-### Hilbert-Schmidt Norm
 
-
-We can also consider the case where the correlations can be measured between samples and not between features. So we can create cross product matrices: $\mathbf{W}_\mathbf{X}=\mathbf{XX}^\top \in \mathbb{R}^{N \times N}$ and $\mathbf{W}_\mathbf{Y}=\mathbf{YY}^\top \in \mathbb{R}^{N \times N}$. To measure the proximity, we can use the Hilbert-Schmidt (HS) norm, $||\cdot||_{F}$. 
-
-$$
-\begin{aligned}
-\langle {W}_\mathbf{X}, {W}_\mathbf{Y} \rangle 
-&= 
-tr \left( \mathbf{XX}^\top \mathbf{YY}^\top \right) \\
-&= 
-\sum_{i=1}^{D_x} \sum_{j=1}^{D_y} cov^2(\mathbf{X}_{d_i}, \mathbf{Y}_{d_j})
-\end{aligned}
-$$
-
-**Observations**
-* HSIC norm of the covariance only detects second order relationships. More complex (higher-order, nonlinear) relations cannot be captured
 
 ---
 
