@@ -2,20 +2,22 @@
 
 > How much information one random variable says about another random variable.
 
-- [Intiution](#intiution)
-- [Full Definition](#full-definition)
-- [Code](#code)
-- [Supplementary](#supplementary)
-  - [Information](#information)
-    - [Intuition](#intuition)
-    - [Formulation](#formulation)
-    - [Units](#units)
-  - [Entropy](#entropy)
-    - [Intuition](#intuition-1)
-    - [Single Variable](#single-variable)
-    - [Code - Step-by-Step](#code---step-by-step)
-    - [Multivariate](#multivariate)
-    - [Relative Entropy (KL-Divergence)](#relative-entropy-kl-divergence)
+- [Mutual Information](#mutual-information)
+  - [Intiution](#intiution)
+  - [Full Definition](#full-definition)
+  - [Code](#code)
+  - [Supplementary](#supplementary)
+    - [Information](#information)
+      - [Intuition](#intuition)
+      - [Formulation](#formulation)
+      - [Units](#units)
+    - [Entropy](#entropy)
+      - [Intuition](#intuition-1)
+      - [Single Variable](#single-variable)
+      - [Code - Step-by-Step](#code---step-by-step)
+      - [Multivariate](#multivariate)
+      - [Relative Entropy (KL-Divergence)](#relative-entropy-kl-divergence)
+  - [Supplementary](#supplementary-1)
 
 
 ---
@@ -156,3 +158,8 @@ $$D_{KL} (P,Q) = \int_\mathcal{X} p(x) \:\log \frac{p(x)}{q(x)}\;dx$$
 * aka expected log-likelihood ratio
 * measure of inefficiency of assuming that the distribution is $q$ when we know the true distribution is $p$.
 
+---
+
+## Supplementary
+
+* [MI w. Numpy](https://stackoverflow.com/questions/20491028/optimal-way-to-compute-pairwise-mutual-information-using-numpy)

@@ -26,6 +26,7 @@ class TaylorDiagram:
         fig: Optional[plt.figure] = None,
         subplot: Optional[int] = 111,
         extend_angle: bool = False,
+        corr_labels: Optional[np.ndarray] = None,
         corr_range: Tuple[float, float] = (0, 10),
         ref_label: str = "Reference Point",
         angle_label: str = "Correlation",
@@ -36,8 +37,10 @@ class TaylorDiagram:
         self.ref_label = ref_label
         self.var_label = var_label
         self.extend_angle = extend_angle
-        # corr_locations
-        corr_labels = np.array([0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99, 1])
+
+        # correlation labels
+        if corr_labels is None:
+            corr_labels = np.array([0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99, 1])
 
         # extend
         if extend_angle:
@@ -68,7 +71,7 @@ class TaylorDiagram:
             tick_formatter1=tf1,
         )
 
-        # create graphical axies
+        # create graphical axes
 
         ax = floating_axes.FloatingSubplot(fig, subplot, grid_helper=ghelper)
         fig.add_subplot(ax)
@@ -80,9 +83,9 @@ class TaylorDiagram:
         self.reset_axes()
 
     def add_reference_point(self, ref_point: float, *args, **kwargs) -> None:
-        l, = self.polar_axes.plot([0], ref_point, *args, **kwargs)
+        line = self.polar_axes.plot([0], ref_point, *args, **kwargs)
 
-        self.sample_points.append(l)
+        self.sample_points.append(line[0])
 
         return None
 
@@ -91,6 +94,16 @@ class TaylorDiagram:
         t = np.linspace(0, self.tmax)
         r = np.zeros_like(t) + ref_point
         self.polar_axes.plot(t, r, *args, **kwargs)
+
+        return None
+
+    def add_point(self, var_point: float, corr_point: float, *args, **kwargs) -> None:
+
+        # add sample to plot
+        line = self.polar_axes.plot(np.arccos(corr_point), var_point, *args, **kwargs)
+
+        # add line to sample points
+        self.sample_points.append(line[0])
 
         return None
 
@@ -109,6 +122,16 @@ class TaylorDiagram:
         dist = np.sqrt(ref_point ** 2 + rs ** 2 - 2 * ref_point * rs * np.cos(ts))
 
         self.contours = self.polar_axes.contour(ts, rs, dist, levels, **kwargs)
+        return None
+
+    def add_legend(self, fig, *args, **kwargs):
+
+        fig.legend(
+            self.sample_points,
+            [p.get_label() for p in self.sample_points],
+            *args,
+            **kwargs
+        )
         return None
 
     def reset_axes(self):
@@ -150,7 +173,7 @@ class TaylorDiagram:
 def demo():
 
     # reference point
-    ref_point = 10.0
+    ref_point = 9.0
 
     # correlation range
     corr_range = (0, 50)
@@ -158,7 +181,7 @@ def demo():
     # model comparison points
     model_stats = [
         (0.9, 3),  # high correlation, low variance
-        (0.1, 10),  # low correlation, similar variance
+        (0.1, 9),  # low correlation, similar variance
         (0.6, 11),  # ok correlation, similar variance
     ]
 
@@ -175,21 +198,55 @@ def demo():
         extend_angle=False,
         corr_range=corr_range,
     )
-
+    # ========================
     # plot reference point
+    # ========================
     taylor_fig.add_reference_point(
-        ref_point, color="black", marker=".", markersize=20, label="Model I"
+        ref_point,
+        color="black",
+        marker=".",
+        markersize=20,
+        linestyle="",
+        label="Model I",
     )
 
+    # ========================
     # plot reference line
+    # ========================
     taylor_fig.add_reference_line(ref_point, color="black", linestyle="--", label="_")
 
+    # ========================
     # add grid
+    # ========================
     taylor_fig.add_grid()
 
+    # ========================
     # add contours
+    # ========================
     taylor_fig.add_contours(ref_point, levels=3, colors="gray")
+
+    # modify contour labels
     taylor_fig.polar_axes.clabel(taylor_fig.contours, inline=1, fontsize=20, fmt="%.1f")
+
+    # ========================
+    # add samples
+    # ========================
+    taylor_fig.add_point(
+        model_stats[0][1],
+        model_stats[0][0],
+        color="red",
+        markersize=20,
+        linestyle="",
+        marker=".",
+        label="Model II",
+        zorder=3,
+    )
+
+    # ========================
+    # add samples
+    # ========================
+    taylor_fig.add_legend(fig, numpoints=1, prop=dict(size="large"), loc="upper right")
+    # show plot
     plt.show()
 
     pass
