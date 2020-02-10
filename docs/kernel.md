@@ -97,6 +97,12 @@ $$\rho(\mathbf{X}, \mathbf{Y})
 
 * Centered Kernel Alignment
 
+
+---
+
+## Supplementary
+
+
 ---
 
 ## Ideas

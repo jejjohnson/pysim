@@ -1,14 +1,15 @@
 # Taylor Diagram
 
+- [Motivation](#motivation)
+  - [Questions](#questions)
+  - [Current Ways](#current-ways)
+- [Cosine Similarity](#cosine-similarity)
+- [Distances](#distances)
+- [Law of Cosines](#law-of-cosines)
 - [Taylor Diagram](#taylor-diagram)
-  - [Motivation](#motivation)
-    - [Questions](#questions)
-    - [Current Ways](#current-ways)
-  - [Cosine Similarity](#cosine-similarity)
-  - [Law of Cosines](#law-of-cosines)
-  - [Taylor Diagram](#taylor-diagram-1)
-  - [Example](#example)
-  - [Information Theory Diagram](#information-theory-diagram)
+- [Example](#example)
+- [Information Theory Diagram](#information-theory-diagram)
+- [Resources](#resources)
 
 ---
 
@@ -52,6 +53,28 @@ $$
 &= \frac{\sum_{i=1}^N A_i B_i}{\sqrt{\sum_{i=1}^N A_i^2} \sqrt{ \sum_{i=1}^N B_i^2}}
 \end{aligned}$$
 
+---
+
+## Distances
+
+$$d^2(X,Y) = ||X-Y||^2=||X||^2 + ||Y||^2 - 2 \langle X, Y \rangle$$
+
+$$d^2(X,Y) = \sum_{i=1} \lambda_{x_i}^2 + \sum_{i=1} \lambda_{y_i}^2 - 2 \sum_{i,j=1} \lambda_{x_i}\lambda_{y_i}$$
+
+**Correlation Coefficient**
+
+$$\rho(X,Y) = \frac{\langle X,Y \rangle}{||X||\; ||Y||}$$
+
+**Product of Scalars**
+
+$$\begin{aligned}
+\tilde{X} &= \frac{X}{||X||} \\
+\tilde{Y} &= \frac{Y}{||Y||}
+\end{aligned}
+$$
+
+* if $\rho(X,Y) = 0$, the spaces are orthogonal
+* if $\rho(X,Y) = 1$, the spaces are equivalent, $d^2(X,Y) =0$
 
 ---
 
@@ -90,3 +113,10 @@ We see that the points are on top of each other. Makes sense seeing as how all o
 ---
 
 ## Information Theory Diagram
+
+
+---
+
+## Resources
+
+* [Le Traitement des Variables Vectorielles](https://www.jstor.org/stable/pdf/2529140.pdf?refreqid=excelsior%3Ad0e070c83ad4b47c30847094e65d99a7) - Yves Escoufier (1973)

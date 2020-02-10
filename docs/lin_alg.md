@@ -23,6 +23,7 @@ The Frobenius norm is the common matrix-based norm.
 
 $$
 \begin{aligned}
+||A||_F &= \sqrt{\langle A, A \rangle_F} \\
 ||A|| &= \sqrt{\sum_{i,j}|a_{ij}|^2} \\
 &= \sqrt{\text{tr}(A^\top A)} \\
 &= \sqrt{\sum_{i=1}\lambda_i^2}
@@ -85,3 +86,9 @@ f_norm = np.einsum('ij,ji->', X @ X.T)
 ```python
 f_norm = np.linalg.norm(X @ X.T)
 ```
+
+---
+
+## Frobenius Norm
+
+$$||X + Y||^2_F = ||X||_F^2 + ||Y||_F^2 + 2 \langle X, Y \rangle_F$$

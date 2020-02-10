@@ -478,3 +478,6 @@ $$
 * Correlation and Lag for Signals - [notebook](https://currents.soest.hawaii.edu/ocn_data_analysis/_static/SEM_EDOF.html)
 * [Understanding the Covariance Matrix](https://datascienceplus.com/understanding-the-covariance-matrix/)
 * [Numpy Vectorized method for computing covariance with population means](https://stackoverflow.com/questions/34235452/numpy-vectorised-method-for-computing-covariance-with-population-means-for-surv)
+* Eric Marsden
+  * [Modeling Correlations in Python](https://www.slideshare.net/EricMarsden1/modelling-correlations-using-python)
+  * [Regression Analysis in Python](https://www.slideshare.net/EricMarsden1/regression-analysis-using-python)

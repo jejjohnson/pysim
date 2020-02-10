@@ -2,22 +2,21 @@
 
 > How much information one random variable says about another random variable.
 
-- [Mutual Information](#mutual-information)
-  - [Intiution](#intiution)
-  - [Full Definition](#full-definition)
-  - [Code](#code)
-  - [Supplementary](#supplementary)
-    - [Information](#information)
-      - [Intuition](#intuition)
-      - [Formulation](#formulation)
-      - [Units](#units)
-    - [Entropy](#entropy)
-      - [Intuition](#intuition-1)
-      - [Single Variable](#single-variable)
-      - [Code - Step-by-Step](#code---step-by-step)
-      - [Multivariate](#multivariate)
-      - [Relative Entropy (KL-Divergence)](#relative-entropy-kl-divergence)
-  - [Supplementary](#supplementary-1)
+- [Intiution](#intiution)
+- [Full Definition](#full-definition)
+- [Code](#code)
+- [Supplementary](#supplementary)
+  - [Information](#information)
+    - [Intuition](#intuition)
+    - [Formulation](#formulation)
+    - [Units](#units)
+  - [Entropy](#entropy)
+    - [Intuition](#intuition-1)
+    - [Single Variable](#single-variable)
+    - [Code - Step-by-Step](#code---step-by-step)
+    - [Multivariate](#multivariate)
+    - [Relative Entropy (KL-Divergence)](#relative-entropy-kl-divergence)
+- [Supplementary](#supplementary-1)
 
 
 ---
@@ -163,3 +162,4 @@ $$D_{KL} (P,Q) = \int_\mathcal{X} p(x) \:\log \frac{p(x)}{q(x)}\;dx$$
 ## Supplementary
 
 * [MI w. Numpy](https://stackoverflow.com/questions/20491028/optimal-way-to-compute-pairwise-mutual-information-using-numpy)
+* [Predictions and Correlations in Complex Data](https://www.freecodecamp.org/news/how-machines-make-predictions-finding-correlations-in-complex-data-dfd9f0d87889/)

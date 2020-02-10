@@ -524,3 +524,4 @@ $$
 A_c(K_{c1}, K_{c2}) &= \frac{\langle K_{c1}, K_{c2} \rangle_{F}}{\sqrt{\langle K_{c1}, K_{c1} \rangle_{F}\langle K_{c2}, K_{c2} \rangle_{F}}}
 \end{aligned}
 $$
+
