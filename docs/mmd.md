@@ -4,24 +4,24 @@
 
 ---
 
-- [Maximum Mean Discrepancy (MMD)](#maximum-mean-discrepancy-mmd)
-  - [Idea](#idea)
-  - [Formulation](#formulation)
-    - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary)
-    - [**<summary><font color="blue">Code</font></summary>**](#summaryfont-color%22blue%22codefontsummary)
-  - [Kernel Trick](#kernel-trick)
-  - [Empirical Estimate](#empirical-estimate)
-  - [Equivalence](#equivalence)
-    - [KL-Divergence](#kl-divergence)
-    - [Variation of Information](#variation-of-information)
-    - [HSIC](#hsic)
-    - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary-1)
-  - [Supplementary Material](#supplementary-material)
-    - [Feature Map](#feature-map)
-    - [Function Class](#function-class)
-    - [Kernels](#kernels)
-    - [Reproducing Kernel Hilbert Space Notation](#reproducing-kernel-hilbert-space-notation)
-  - [Resources](#resources)
+- [Idea](#idea)
+- [Formulation](#formulation)
+  - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary)
+  - [**<summary><font color="blue">Code</font></summary>**](#summaryfont-color%22blue%22codefontsummary)
+- [Kernel Trick](#kernel-trick)
+- [Empirical Estimate](#empirical-estimate)
+- [Equivalence](#equivalence)
+  - [KL-Divergence](#kl-divergence)
+  - [Variation of Information](#variation-of-information)
+  - [HSIC](#hsic)
+  - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary-1)
+- [Supplementary Material](#supplementary-material)
+  - [Feature Map](#feature-map)
+  - [Function Class](#function-class)
+  - [Kernels](#kernels)
+  - [Reproducing Kernel Hilbert Space Notation](#reproducing-kernel-hilbert-space-notation)
+- [Probabilities in Feature Space: The Mean Trick](#probabilities-in-feature-space-the-mean-trick)
+- [Resources](#resources)
 
 ---
 
@@ -274,6 +274,24 @@ $$\langle f, k(x,\cdot) \rangle = f(x)$$
 Equivalence between $\phi(x)$ and $k(x,\cdot)$.
 
 $$\langle k(x, \cdot), k(x', \cdot) \rangle = k(x, x')$$
+
+---
+
+## Probabilities in Feature Space: The Mean Trick
+
+Given $\mathbb{P}$ a Borel probability measure on $\mathcal{X}$, we can define a feature map $\mu_P \in \mathcal{F}$.
+
+$$\mu_P = \left[ \ldots \mathbb{E}_P\left[ \varphi_i(\mathbf{x}) \right] \right]$$
+
+Given a positive definite kernel $k(x,x')$, we can define the expectation of the cross kernel as:
+
+$$\mathbb{E}_{P,Q}k(\mathbf{x,y}) = \langle \mu_P, \mu_Q \rangle_\mathcal{F}$$
+
+for $x \sim P$ and $q \sim Q$. We can use the mean trick to define the following:
+
+$$\mathbb{E}_P (f(X)) = \langle \mu_P, f(\cdot) \rangle_\mathcal{F}$$
+
+
 
 ---
 

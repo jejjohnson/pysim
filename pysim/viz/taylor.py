@@ -412,4 +412,4 @@ def demo_scatter() -> None:
 
 
 if __name__ == "__main__":
-    demo()
+    demo_scatter()
