@@ -7,3 +7,4 @@ dependences:
 - numpy
 - scipy
 - scikit-learn
+- matplotlib
