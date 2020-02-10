@@ -477,3 +477,4 @@ $$
   * Numpy, SciPy and Pandas: Correlation with Python - [blog](https://realpython.com/numpy-scipy-pandas-correlation-python/)
 * Correlation and Lag for Signals - [notebook](https://currents.soest.hawaii.edu/ocn_data_analysis/_static/SEM_EDOF.html)
 * [Understanding the Covariance Matrix](https://datascienceplus.com/understanding-the-covariance-matrix/)
+* [Numpy Vectorized method for computing covariance with population means](https://stackoverflow.com/questions/34235452/numpy-vectorised-method-for-computing-covariance-with-population-means-for-surv)

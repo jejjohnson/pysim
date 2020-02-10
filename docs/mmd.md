@@ -280,3 +280,10 @@ $$\langle k(x, \cdot), k(x', \cdot) \rangle = k(x, x')$$
 ## Resources
 
 * Arthur Grettons Lectures - [lec 5](http://www.gatsby.ucl.ac.uk/~gretton/coursefiles/lecture5_distribEmbed_1.pdf) | [lec 2]()
+  * [Notes on Mean Embedding](http://www.gatsby.ucl.ac.uk/~gretton/coursefiles/lecture5_covarianceOperator.pdf)
+  * [What is RKHS](http://www.stats.ox.ac.uk/~sejdinov/teaching/atml14/Theory_2014.pdf)
+  * [The Maximum Mean Discrepancy for Training Generative Adversarial Networks](http://members.cbio.mines-paristech.fr/~jvert/svn/kernelcourse/course/2019mva/gretton.pdf)
+  * [From Zero to RKHS](http://users.umiacs.umd.edu/~hal/docs/daume04rkhs.pdf)
+  * [RKHS in ML](http://users.umiacs.umd.edu/~hal/docs/daume04rkhs.pdf)
+* Similarity Loss (TF2) - [code](https://github.com/tensorflow/models/blob/master/research/domain_adaptation/domain_separation/losses.py#L40)
+* [MMD Smola](http://alex.smola.org/teaching/iconip2006/iconip_3.pdf)
