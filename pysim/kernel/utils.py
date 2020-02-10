@@ -137,3 +137,47 @@ def get_param_grid(
     )
 
     return param_grid
+
+
+def get_init_gammas(X, Y, method='median', factor=1, percent=None, scale=1.0, n_gammas=100):
+    
+    # estimate sigma params
+    factor = 1
+    n_gammas = 100
+
+    # Estimate Sigma
+    sigma_x = estimate_sigma(X, method=method, percent=percent, scale=scale)
+    sigma_y = estimate_sigma(Y, method=method, percent=percent, scale=scale)
+
+    # init overall sigma is mean between two
+    init_sigma = np.mean([sigma_x, sigma_y])
+
+    # get sigma parameter grid
+    sigmas = get_param_grid(init_sigma, factor, n_gammas)
+
+
+    gammas = sigma_to_gamma(sigmas)
+    init_gamma = sigma_to_gamma(init_sigma)
+    return init_gamma, gammas
+
+def gamma_to_sigma(gamma: float) -> float:
+    """Transforms the gamma parameter into sigma using the 
+    following relationship:
+       
+                         1
+        sigma =  -----------------
+                 sqrt( 2 * gamma )
+    """
+    return 1 / np.sqrt(2 * gamma)
+
+
+def sigma_to_gamma(sigma: float) -> float:
+    """Transforms the sigma parameter into gamma using the 
+    following relationship:
+       
+                      1
+         gamma = -----------
+                 2 * sigma^2
+    """
+    return 1 / (2 * sigma ** 2)
+
