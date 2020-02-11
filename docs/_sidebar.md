@@ -1,14 +1,14 @@
 * [PySim](/)
-* [What is Similarity?](similarity.md)
-* [Visualizing Similarity](taylor.md)
+* [What is Similarity?](linear/similarity.md)
+* [Visualizing Similarity](visualization/taylor.md)
 
 **Methods**
-* [RV Coefficient](rv.md)
-* [HSIC](hsic.md)
-* [MMD](mmd.md)
-* [Mutual Information](mi.md)
-* [Variation of Information](vi.md)
+* [RV Coefficient](linear/rv.md)
+* [HSIC](kernel/hsic.md)
+* [MMD](kernel/mmd.md)
+* [Mutual Information](kernel/mi.md)
+* [Variation of Information](information/vi.md)
 
 **Supplementary**
-* [PDF Estimation](pdf_est.md)
-* [Linear Algebra](lin_alg.md)
+* [PDF Estimation](information/pdf_est.md)
+* [Linear Algebra](linear/lin_alg.md)

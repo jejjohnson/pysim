@@ -392,21 +392,53 @@ hsic_score = np.einsum("ji,ij->", K_x, K_y)
 
 ## Randomized HSIC
 
+If we understand that we can decompose a kernel matrix $K_x$ into two components, we can express it like so:
+
 $$\tilde{K}_x = Z_x Z_x^\top$$
 
-Let $\tilde{Z} = Z H$ be the normalized version. So plugging this into the HSIC formulation, we get:
+Let $\tilde{Z} = Z H$ be the normalized version. So plugging this decomposition into the HSIC formulation, we get:
 
 $$
-\text{MMD}^2(\hat{P}_{XY}, \hat{P}_X\hat{P}_Y, \mathcal{H}_k) \coloneqq 
+\text{HSIC}(\hat{P}_{XY}, \mathcal{F}, \mathcal{G}) \coloneqq 
 \frac{1}{n^2}\text{tr} \left( \tilde{Z}_x \tilde{Z}_x^\top \tilde{Z}_y \tilde{Z}_y^\top \right)
 $$
 
-Of course this is still the same size so we haven't done anything effectively. So we can make use of the matrix properties.
+Of course this is still the same size as the original formulation so we haven't done anything effectively. But we can make use of the matrix property that the trace is invariant under cyclic permutations i.e.
+
+$$\text{tr}(ABCD) = \text{tr} (BCDA) $$
+
+So we can apply this cyclic transformation to obtain:
 
 $$
-\text{MMD}^2(\hat{P}_{XY}, \hat{P}_X\hat{P}_Y, \mathcal{H}_k) \coloneqq 
+\text{HSIC}(\hat{P}_{XY}, \mathcal{F}, \mathcal{G}) \coloneqq 
 \frac{1}{n^2}\text{tr} \left(  \tilde{Z}_x^\top \tilde{Z}_y Z_y^\top \tilde{Z}_x \right)
 $$
+
+Now this final matrix is size $N_{\text{f}} \times N_{\text{f}}$ which can be smaller than the number of samples present $N_{\text{f}} << N$ which will result in an order $\mathcal{O}(N N_\text{f}^2)$.
+
+### Random Fourier Features
+
+
+### Nystrom Approximation
+
+
+$$K \approx C W^\dagger C^\top$$
+
+According to ... the Nystroem approximation works better when you want features that are data dependent. The RFF method assumes a basis function and it is irrelevant to the data. It's merely projecting the data into the independent basis. The Nystroem approximation forms the basis through the data itself.
+
+**Resources**
+
+* A Practical Guide to Randomized Matrix Computations with MATLAB Implementations - Shusen Wang (2015) - [axriv](https://arxiv.org/abs/1505.07570)
+
+### Structured Kernel Interpolation
+
+
+$$
+\begin{aligned}
+K &\approx C W^\dagger C^\top \\
+&\approx (XW) W^\dagger (XW)^\top \\
+&\approx X W X^\top
+\end{aligned}$$
 
 ---
 ## Practical Equations

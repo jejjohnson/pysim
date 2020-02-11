@@ -17,17 +17,19 @@
 * $\mathbf{X},\mathbf{Y}$ must have different number of samples
 
 ---
-- [Covariance Measures](#covariance-measures)
-  - [Uncentered Kernel](#uncentered-kernel)
-  - [Centered Kernel](#centered-kernel)
-    - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic)
-    - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd)
-- [Correlation Measures](#correlation-measures)
-  - [Uncentered Kernel](#uncentered-kernel-1)
-    - [Kernel Alignment (KA)](#kernel-alignment-ka)
-  - [Uncentered Kernel](#uncentered-kernel-2)
-    - [Centered Kernel Alignment (cKA)](#centered-kernel-alignment-cka)
-- [Ideas](#ideas)
+- [Kernel Measures of Similarity](#kernel-measures-of-similarity)
+  - [Covariance Measures](#covariance-measures)
+    - [Uncentered Kernel](#uncentered-kernel)
+    - [Centered Kernel](#centered-kernel)
+      - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic)
+      - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd)
+  - [Correlation Measures](#correlation-measures)
+    - [Uncentered Kernel](#uncentered-kernel-1)
+      - [Kernel Alignment (KA)](#kernel-alignment-ka)
+    - [Uncentered Kernel](#uncentered-kernel-2)
+      - [Centered Kernel Alignment (cKA)](#centered-kernel-alignment-cka)
+  - [Supplementary](#supplementary)
+  - [Ideas](#ideas)
 
 
 ---
@@ -55,7 +57,7 @@ $$\text{cov}(\mathbf{X}, \mathbf{Y}) =||\tilde{K}_{\mathbf{xy}}||_\mathcal{F}
 #### Maximum Mean Discrepency (MMD)
 
 
-$$\text{cov}(\mathbf{X}, \mathbf{Y}) = ||K_\mathbf{x}||_\mathcal{F} + ||K_\mathbf{y}||_\mathcal{F}  -  \langle \tilde{K}_\mathbf{x}, \tilde{K}_\mathbf{y} \rangle_\mathcal{F}$$
+$$\text{cov}(\mathbf{X}, \mathbf{Y}) = ||K_\mathbf{x}||_\mathcal{F} + ||K_\mathbf{y}||_\mathcal{F}  -  2\langle \tilde{K}_\mathbf{x}, \tilde{K}_\mathbf{y} \rangle_\mathcal{F}$$
 
 **[Source](https://github.com/choasma/HSIC-bottleneck/blob/master/source/hsicbt/math/hsic.py#L69)**
 
