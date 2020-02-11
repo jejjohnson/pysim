@@ -389,6 +389,26 @@ hsic_score = np.einsum("ji,ij->", K_x, K_y)
 * Why the HS nrm?
 
 ---
+
+## Randomized HSIC
+
+$$\tilde{K}_x = Z_x Z_x^\top$$
+
+Let $\tilde{Z} = Z H$ be the normalized version. So plugging this into the HSIC formulation, we get:
+
+$$
+\text{MMD}^2(\hat{P}_{XY}, \hat{P}_X\hat{P}_Y, \mathcal{H}_k) \coloneqq 
+\frac{1}{n^2}\text{tr} \left( \tilde{Z}_x \tilde{Z}_x^\top \tilde{Z}_y \tilde{Z}_y^\top \right)
+$$
+
+Of course this is still the same size so we haven't done anything effectively. So we can make use of the matrix properties.
+
+$$
+\text{MMD}^2(\hat{P}_{XY}, \hat{P}_X\hat{P}_Y, \mathcal{H}_k) \coloneqq 
+\frac{1}{n^2}\text{tr} \left(  \tilde{Z}_x^\top \tilde{Z}_y Z_y^\top \tilde{Z}_x \right)
+$$
+
+---
 ## Practical Equations
 
 

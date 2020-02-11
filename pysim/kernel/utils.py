@@ -5,6 +5,26 @@ from scipy.spatial.distance import pdist, squareform
 from sklearn.utils import check_array, check_random_state
 
 
+def estimate_gamma(
+    X: np.ndarray,
+    subsample: Optional[int] = None,
+    method: str = "median",
+    percent: Optional[float] = 0.15,
+    scale: float = 1.0,
+    random_state: Optional[int] = None,
+) -> float:
+
+    init_sigma = estimate_sigma(
+        X=X,
+        subsample=subsample,
+        method=method,
+        percent=percent,
+        scale=scale,
+        random_state=random_state,
+    )
+    return sigma_to_gamma(init_sigma)
+
+
 def estimate_sigma(
     X: np.ndarray,
     subsample: Optional[int] = None,
@@ -98,7 +118,7 @@ def estimate_sigma(
 
 
 def get_param_grid(
-    init_sigma: float = 1.0, factor: int = 2, n_grid_points: int = 20,
+    init_sigma: float = 1.0, factor: int = 2, n_grid_points: int = 20
 ) -> List[float]:
     """Get a standard parameter grid for the cross validation strategy.
     
@@ -139,8 +159,10 @@ def get_param_grid(
     return param_grid
 
 
-def get_init_gammas(X, Y, method='median', factor=1, percent=None, scale=1.0, n_gammas=100):
-    
+def get_init_gammas(
+    X, Y, method="median", factor=1, percent=None, scale=1.0, n_gammas=100
+):
+
     # estimate sigma params
     factor = 1
     n_gammas = 100
@@ -155,10 +177,10 @@ def get_init_gammas(X, Y, method='median', factor=1, percent=None, scale=1.0, n_
     # get sigma parameter grid
     sigmas = get_param_grid(init_sigma, factor, n_gammas)
 
-
     gammas = sigma_to_gamma(sigmas)
     init_gamma = sigma_to_gamma(init_sigma)
     return init_gamma, gammas
+
 
 def gamma_to_sigma(gamma: float) -> float:
     """Transforms the gamma parameter into sigma using the 
