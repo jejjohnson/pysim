@@ -23,6 +23,12 @@
     - [Centered Kernel](#centered-kernel)
       - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic)
       - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd)
+  - [Kernel Matrix Inversion](#kernel-matrix-inversion)
+      - [Sherman-Morrison-Woodbury](#sherman-morrison-woodbury)
+  - [Kernel Approximation](#kernel-approximation)
+    - [Random Fourier Features](#random-fourier-features)
+    - [Nystrom Approximation](#nystrom-approximation)
+    - [Structured Kernel Interpolation](#structured-kernel-interpolation)
   - [Correlation Measures](#correlation-measures)
     - [Uncentered Kernel](#uncentered-kernel-1)
       - [Kernel Alignment (KA)](#kernel-alignment-ka)
@@ -61,6 +67,47 @@ $$\text{cov}(\mathbf{X}, \mathbf{Y}) = ||K_\mathbf{x}||_\mathcal{F} + ||K_\mathb
 
 **[Source](https://github.com/choasma/HSIC-bottleneck/blob/master/source/hsicbt/math/hsic.py#L69)**
 
+---
+
+## Kernel Matrix Inversion
+
+#### Sherman-Morrison-Woodbury
+
+$$(A + BCD)^{-1} = A^{-1} - A^{-1}B(C^{-1} + DA^{-1}B)^{-1}A^{-1}$$
+
+**Matrix Sketch**
+
+$$(LL^\top + \sigma I_N)^{-1} = \sigma^{-1} I_N - \sigma^{-1} (\sigma I_{n} + L^\top L)^{-1} L^{\top} $$
+
+---
+
+## Kernel Approximation
+
+### Random Fourier Features
+
+$$K \approx ZZ^\top$$
+
+
+### Nystrom Approximation
+
+
+$$K \approx C W^\dagger C^\top$$
+
+According to ... the Nystroem approximation works better when you want features that are data dependent. The RFF method assumes a basis function and it is irrelevant to the data. It's merely projecting the data into the independent basis. The Nystroem approximation forms the basis through the data itself.
+
+**Resources**
+
+* A Practical Guide to Randomized Matrix Computations with MATLAB Implementations - Shusen Wang (2015) - [axriv](https://arxiv.org/abs/1505.07570)
+
+### Structured Kernel Interpolation
+
+
+$$
+\begin{aligned}
+K &\approx C W^\dagger C^\top \\
+&\approx (XW) W^\dagger (XW)^\top \\
+&\approx X W X^\top
+\end{aligned}$$
 
 
 

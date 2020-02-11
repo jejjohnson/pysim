@@ -416,29 +416,7 @@ $$
 
 Now this final matrix is size $N_{\text{f}} \times N_{\text{f}}$ which can be smaller than the number of samples present $N_{\text{f}} << N$ which will result in an order $\mathcal{O}(N N_\text{f}^2)$.
 
-### Random Fourier Features
 
-
-### Nystrom Approximation
-
-
-$$K \approx C W^\dagger C^\top$$
-
-According to ... the Nystroem approximation works better when you want features that are data dependent. The RFF method assumes a basis function and it is irrelevant to the data. It's merely projecting the data into the independent basis. The Nystroem approximation forms the basis through the data itself.
-
-**Resources**
-
-* A Practical Guide to Randomized Matrix Computations with MATLAB Implementations - Shusen Wang (2015) - [axriv](https://arxiv.org/abs/1505.07570)
-
-### Structured Kernel Interpolation
-
-
-$$
-\begin{aligned}
-K &\approx C W^\dagger C^\top \\
-&\approx (XW) W^\dagger (XW)^\top \\
-&\approx X W X^\top
-\end{aligned}$$
 
 ---
 ## Practical Equations
