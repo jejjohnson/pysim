@@ -549,6 +549,25 @@ def HSIC_demo():
     Y = X @ A
 
     # =======================================
+    print("\nLinearHSIC Method (centered):")
+    # =======================================
+
+    # initialize method
+    clf_RFFHSIC = HSIC(center=True, kernel="linear")
+
+    # fit method
+    clf_RFFHSIC.fit(X, Y)
+
+    # calculate scores
+    hsic_score = clf_RFFHSIC.score(X, Y)
+    nhsic_score = clf_RFFHSIC.score(X, Y, normalize=True)
+
+    print(f"<K_x,K_y>: {hsic_score:.6f}")
+    print(f"||K_xx||: {clf_RFFHSIC.K_x_norm:.6f}")
+    print(f"||K_yy||: {clf_RFFHSIC.K_y_norm:.6f}")
+    print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
+
+    # =======================================
     print("\nRBF HSIC Method (centered):")
     # =======================================
 
@@ -603,6 +622,25 @@ def HSIC_demo():
     print(f"<K_x,K_y>: {hsic_score:.6f}")
     print(f"||K_xx||: {clf_RHSIC.Zx_norm:.6f}")
     print(f"||K_yy||: {clf_RHSIC.Zy_norm:.6f}")
+    print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
+
+    # =======================================
+    print("\nLinear HSIC Method (not centered):")
+    # =======================================
+
+    # initialize method
+    clf_HSIC = HSIC(center=False, kernel="linear")
+
+    # fit method
+    clf_HSIC.fit(X, Y)
+
+    # calculate scores
+    hsic_score = clf_HSIC.score(X, Y)
+    nhsic_score = clf_HSIC.score(X, Y, normalize=True)
+
+    print(f"<K_x,K_y>: {hsic_score:.6f}")
+    print(f"||K_xx||: {clf_HSIC.K_x_norm:.6f}")
+    print(f"||K_yy||: {clf_HSIC.K_y_norm:.6f}")
     print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
 
     # =======================================
