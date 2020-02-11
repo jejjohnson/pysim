@@ -540,7 +540,7 @@ def HSIC_demo():
 
     # fix random seed
     np.random.seed(123)
-    n_samples = 2_000
+    n_samples = 1_000
     n_features = 50
     n_components = 100
     A = np.random.rand(n_features, n_features)
