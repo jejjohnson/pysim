@@ -1,7 +1,8 @@
 from typing import Callable, Optional, Union
 
 import numpy as np
-from hsic import HSIC, RFFHSIC, RHSIC
+
+from hsic import HSIC, RFFHSIC, RandomizedHSIC
 
 
 def HSIC_demo():
@@ -21,18 +22,18 @@ def HSIC_demo():
     # =======================================
 
     # initialize method
-    clf_RFFHSIC = HSIC(center=True, kernel="linear")
+    hsic_clf = HSIC(center=True, kernel="linear")
 
     # fit method
-    clf_RFFHSIC.fit(X, Y)
+    hsic_clf.fit(X, Y)
 
     # calculate scores
-    hsic_score = clf_RFFHSIC.score(X, Y)
-    nhsic_score = clf_RFFHSIC.score(X, Y, normalize=True)
+    hsic_score = hsic_clf.score(X, Y)
+    nhsic_score = hsic_clf.score(X, Y, normalize=True)
 
     print(f"<K_x,K_y>: {hsic_score:.6f}")
-    print(f"||K_xx||: {clf_RFFHSIC.K_x_norm:.6f}")
-    print(f"||K_yy||: {clf_RFFHSIC.K_y_norm:.6f}")
+    print(f"||K_xx||: {hsic_clf.K_x_norm:.6f}")
+    print(f"||K_yy||: {hsic_clf.K_y_norm:.6f}")
     print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
 
     # =======================================
@@ -40,18 +41,18 @@ def HSIC_demo():
     # =======================================
 
     # initialize method
-    clf_RFFHSIC = HSIC(center=True, kernel="rbf")
+    hsic_clf = HSIC(center=True, kernel="rbf")
 
     # fit method
-    clf_RFFHSIC.fit(X, Y)
+    hsic_clf.fit(X, Y)
 
     # calculate scores
-    hsic_score = clf_RFFHSIC.score(X, Y)
-    nhsic_score = clf_RFFHSIC.score(X, Y, normalize=True)
+    hsic_score = hsic_clf.score(X, Y)
+    nhsic_score = hsic_clf.score(X, Y, normalize=True)
 
     print(f"<K_x,K_y>: {hsic_score:.6f}")
-    print(f"||K_xx||: {clf_RFFHSIC.K_x_norm:.6f}")
-    print(f"||K_yy||: {clf_RFFHSIC.K_y_norm:.6f}")
+    print(f"||K_xx||: {hsic_clf.K_x_norm:.6f}")
+    print(f"||K_yy||: {hsic_clf.K_y_norm:.6f}")
     print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
 
     # =======================================
@@ -59,18 +60,18 @@ def HSIC_demo():
     # =======================================
 
     # initialize method
-    clf_HSIC = RFFHSIC(center=True, n_components=n_components)
+    rffhsic_clf = RFFHSIC(center=True, n_components=n_components)
 
     # fit method
-    clf_HSIC.fit(X, Y)
+    rffhsic_clf.fit(X, Y)
 
     # calculate scores
-    hsic_score = clf_HSIC.score(X, Y)
-    nhsic_score = clf_HSIC.score(X, Y, normalize=True)
+    hsic_score = rffhsic_clf.score(X, Y)
+    nhsic_score = rffhsic_clf.score(X, Y, normalize=True)
 
     print(f"<K_x,K_y>: {hsic_score:.6f}")
-    print(f"||K_xx||: {clf_HSIC.Zx_norm:.6f}")
-    print(f"||K_yy||: {clf_HSIC.Zy_norm:.6f}")
+    print(f"||K_xx||: {rffhsic_clf.Zx_norm:.6f}")
+    print(f"||K_yy||: {rffhsic_clf.Zy_norm:.6f}")
     print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
 
     # =======================================
@@ -78,18 +79,18 @@ def HSIC_demo():
     # =======================================
 
     # initialize method
-    clf_RHSIC = RHSIC(center=True, n_components=n_components, kernel="rbf")
+    rhsic_clf = RandomizedHSIC(center=True, n_components=n_components, kernel="rbf")
 
     # fit method
-    clf_RHSIC.fit(X, Y)
+    rhsic_clf.fit(X, Y)
 
     # calculate scores
-    hsic_score = clf_RHSIC.score(X, Y)
-    nhsic_score = clf_RHSIC.score(X, Y, normalize=True)
+    hsic_score = rhsic_clf.score(X, Y)
+    nhsic_score = rhsic_clf.score(X, Y, normalize=True)
 
     print(f"<K_x,K_y>: {hsic_score:.6f}")
-    print(f"||K_xx||: {clf_RHSIC.Zx_norm:.6f}")
-    print(f"||K_yy||: {clf_RHSIC.Zy_norm:.6f}")
+    print(f"||K_xx||: {rhsic_clf.Zx_norm:.6f}")
+    print(f"||K_yy||: {rhsic_clf.Zy_norm:.6f}")
     print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
 
     # =======================================
@@ -97,18 +98,18 @@ def HSIC_demo():
     # =======================================
 
     # initialize method
-    clf_HSIC = HSIC(center=False, kernel="linear")
+    hsic_clf = HSIC(center=False, kernel="linear")
 
     # fit method
-    clf_HSIC.fit(X, Y)
+    hsic_clf.fit(X, Y)
 
     # calculate scores
-    hsic_score = clf_HSIC.score(X, Y)
-    nhsic_score = clf_HSIC.score(X, Y, normalize=True)
+    hsic_score = hsic_clf.score(X, Y)
+    nhsic_score = hsic_clf.score(X, Y, normalize=True)
 
     print(f"<K_x,K_y>: {hsic_score:.6f}")
-    print(f"||K_xx||: {clf_HSIC.K_x_norm:.6f}")
-    print(f"||K_yy||: {clf_HSIC.K_y_norm:.6f}")
+    print(f"||K_xx||: {hsic_clf.K_x_norm:.6f}")
+    print(f"||K_yy||: {hsic_clf.K_y_norm:.6f}")
     print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
 
     # =======================================
@@ -116,18 +117,18 @@ def HSIC_demo():
     # =======================================
 
     # initialize method
-    clf_HSIC = HSIC(center=False, kernel="rbf")
+    hsic_clf = HSIC(center=False, kernel="rbf")
 
     # fit method
-    clf_HSIC.fit(X, Y)
+    hsic_clf.fit(X, Y)
 
     # calculate scores
-    hsic_score = clf_HSIC.score(X, Y)
-    nhsic_score = clf_HSIC.score(X, Y, normalize=True)
+    hsic_score = hsic_clf.score(X, Y)
+    nhsic_score = hsic_clf.score(X, Y, normalize=True)
 
     print(f"<K_x,K_y>: {hsic_score:.6f}")
-    print(f"||K_xx||: {clf_HSIC.K_x_norm:.6f}")
-    print(f"||K_yy||: {clf_HSIC.K_y_norm:.6f}")
+    print(f"||K_xx||: {hsic_clf.K_x_norm:.6f}")
+    print(f"||K_yy||: {hsic_clf.K_y_norm:.6f}")
     print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
 
     # =======================================
@@ -135,18 +136,18 @@ def HSIC_demo():
     # =======================================
 
     # initialize method
-    clf_HSIC = RFFHSIC(center=False, n_components=n_components)
+    rffhsic_clf = RFFHSIC(center=False, n_components=n_components)
 
     # fit method
-    clf_HSIC.fit(X, Y)
+    rffhsic_clf.fit(X, Y)
 
     # calculate scores
-    hsic_score = clf_HSIC.score(X, Y)
-    nhsic_score = clf_HSIC.score(X, Y, normalize=True)
+    hsic_score = rffhsic_clf.score(X, Y)
+    nhsic_score = rffhsic_clf.score(X, Y, normalize=True)
 
     print(f"<K_x,K_y>: {hsic_score:.6f}")
-    print(f"||K_xx||: {clf_HSIC.Zx_norm:.6f}")
-    print(f"||K_yy||: {clf_HSIC.Zy_norm:.6f}")
+    print(f"||K_xx||: {rffhsic_clf.Zx_norm:.6f}")
+    print(f"||K_yy||: {rffhsic_clf.Zy_norm:.6f}")
     print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
 
     # =======================================
@@ -154,18 +155,18 @@ def HSIC_demo():
     # =======================================
 
     # initialize method
-    clf_HSIC = RHSIC(center=False, n_components=n_components, kernel="rbf")
+    rhsic_clf = RandomizedHSIC(center=False, n_components=n_components, kernel="rbf")
 
     # fit method
-    clf_HSIC.fit(X, Y)
+    rhsic_clf.fit(X, Y)
 
     # calculate scores
-    hsic_score = clf_HSIC.score(X, Y)
-    nhsic_score = clf_HSIC.score(X, Y, normalize=True)
+    hsic_score = rhsic_clf.score(X, Y)
+    nhsic_score = rhsic_clf.score(X, Y, normalize=True)
 
     print(f"<K_x,K_y>: {hsic_score:.6f}")
-    print(f"||K_xx||: {clf_HSIC.Zx_norm:.6f}")
-    print(f"||K_yy||: {clf_HSIC.Zy_norm:.6f}")
+    print(f"||K_xx||: {rhsic_clf.Zx_norm:.6f}")
+    print(f"||K_yy||: {rhsic_clf.Zy_norm:.6f}")
     print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {nhsic_score:.6f}")
 
 

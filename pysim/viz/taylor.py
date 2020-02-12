@@ -1,7 +1,7 @@
 from typing import Optional, Tuple
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.projections import PolarAxes
 from mpl_toolkits.axisartist import floating_axes, grid_finder
 

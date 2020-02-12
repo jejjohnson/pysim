@@ -2,10 +2,11 @@ from typing import Callable, Optional, Union
 
 import numpy as np
 from sklearn.base import BaseEstimator
+from sklearn.kernel_approximation import Nystroem, RBFSampler
 from sklearn.metrics.pairwise import linear_kernel, pairwise_kernels
-from sklearn.kernel_approximation import RBFSampler, Nystroem
 from sklearn.preprocessing import KernelCenterer
 from sklearn.utils import check_array, check_random_state
+
 from utils import estimate_gamma
 
 
@@ -46,9 +47,10 @@ class HSIC(BaseEstimator):
         Interpretation of the default value is left to the kernel; 
         see the documentation for sklearn.metrics.pairwise.
         Ignored by other kernels.
+    
+    
     gamma_Y : float, default=None
-        The same gamma parameter as the X. If None, the same gamma_X will be
-        used for the Y.
+        The same gamma parameter as the X. If None, the gamma will be estimated.
     
     degree : float, default=3
         Degree of the polynomial kernel. Ignored by other kernels.
@@ -71,6 +73,17 @@ class HSIC(BaseEstimator):
     Author : J. Emmanuel Johnson
     Email  : jemanjohnson34@gmail.com
     Date   : 14-Feb-2019
+
+    Example
+    -------
+    >> samples, features = 100, 50
+    >> X = np.random.randn(samples, features)
+    >> A = np.random.rand(features, features)
+    >> Y = X @ A
+    >> hsic_clf = HSIC(center=True, kernel='linear')
+    >> hsic_clf.fit(X, Y)
+    >> cka_score = hsic_clf.score(X)
+    >> print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {cka_score:.3f}")
     """
 
     def __init__(
@@ -122,11 +135,13 @@ class HSIC(BaseEstimator):
         self.X_train_ = X
         self.Y_train_ = Y
 
-        # Calculate Kernel Matrices
+        # estimate the gamma parameter
         if self.gamma_X is None:
             self.gamma_X = estimate_gamma(X)
         if self.gamma_Y is None:
             self.gamma_Y = estimate_gamma(Y)
+
+        # Calculate the kernel matrices
         K_x = self.compute_kernel(X, gamma=self.gamma_X)
         K_y = self.compute_kernel(Y, gamma=self.gamma_Y)
 
@@ -179,9 +194,12 @@ class HSIC(BaseEstimator):
             raise ValueError(f"Unrecognized normalize argument: {normalize}")
 
 
-class RHSIC(BaseEstimator):
+class RandomizedHSIC(BaseEstimator):
     """Hilbert-Schmidt Independence Criterion (HSIC). This is
-    a method for measuring independence between two variables.
+    a method for measuring independence between two variables. This method
+    uses the Nystrom method as an approximation to the large kernel matrix.
+    Typically this works really well as it is data-dependent; thus it will
+    converge to the real kernel matrix as the number of components increases.
 
     Methods in the Literature
 
@@ -241,6 +259,17 @@ class RHSIC(BaseEstimator):
     Author : J. Emmanuel Johnson
     Email  : jemanjohnson34@gmail.com
     Date   : 14-Feb-2019
+
+    Example
+    -------
+    >> samples, features, components = 100, 50, 10
+    >> X = np.random.randn(samples, features)
+    >> A = np.random.rand(features, features)
+    >> Y = X @ A
+    >> rhsic_clf = RandomizeHSIC(center=True, n_components=components)
+    >> rhsic_clf.fit(X, Y)
+    >> cka_score = rhsic_clf.score(X)
+    >> print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {cka_score:.3f}")
     """
 
     def __init__(
@@ -376,7 +405,10 @@ class RHSIC(BaseEstimator):
 class RFFHSIC(BaseEstimator):
     """Hilbert-Schmidt Independence Criterion (HSIC) with random matrices. 
     This is a method for measuring independence between two variables similar
-    to the original HSIC but it offers support for randomized matrices.
+    to the original HSIC but it offers support for randomized matrices. This
+    mehtod uses the random fourier features as a basis approximation. This is
+    not data dependent so the more random features does not necessarily 
+    converge to the true kernel. But it is a fast, good approximation.
 
     Methods in the Literature
 
@@ -426,6 +458,16 @@ class RFFHSIC(BaseEstimator):
     Author : J. Emmanuel Johnson
     Email  : jemanjohnson34@gmail.com
     Date   : 14-Feb-2019
+
+    Example
+    -------
+    >> samples, features, components = 100, 50, 10
+    >> X = np.random.randn(samples, features)
+    >> A = np.random.rand(features, features)
+    >> Y = X @ A
+    >> rffhsic_clf = RFFHSIC(center=True, kernel='linear').fit(X, Y)
+    >> cka_score = rffhsic_clf.score(X)
+    >> print(f"<K_x,K_y> / ||K_xx|| / ||K_yy||: {cka_score:.3f}")
     """
 
     def __init__(
@@ -534,4 +576,3 @@ class RFFHSIC(BaseEstimator):
             return self.hsic_bias * self.hsic_value
         else:
             raise ValueError(f"Unrecognized normalize argument: {normalize}")
-

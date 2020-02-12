@@ -1,10 +1,12 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import argparse
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+from taylor import TaylorDiagram
 
 plt.style.use(["seaborn-talk"])
 
-from taylor import TaylorDiagram
 
 
 def demo_simple() -> None:
@@ -35,6 +37,7 @@ def demo_simple() -> None:
         extend_angle=False,
         ref_range=ref_range,
     )
+
     # ========================
     # plot reference point
     # ========================
