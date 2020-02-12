@@ -12,9 +12,9 @@ from shutil import rmtree
 from setuptools import Command, find_packages, setup
 
 # Package meta-data.
-NAME = "mypackage"
-DESCRIPTION = "My short description for my project."
-URL = "https://github.com/jejjohnson/myproject"
+NAME = "pysim"
+DESCRIPTION = "Python similarity measures."
+URL = "https://github.com/jejjohnson/pysim"
 EMAIL = "jemanjohnson34@gmail.com"
 AUTHOR = "J. Emmanuel Johnson"
 REQUIRES_PYTHON = ">=3.6.0"
@@ -22,12 +22,14 @@ VERSION = "0.1.0"
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    # 'requests', 'maya', 'records',
+    "numpy",
+    "scipy",
+    "scikit-learn",
 ]
 
 # What packages are optional?
 EXTRAS = {
-    # 'fancy feature': ['django'],
+    "dev": ["matplotlib", "black", "isort", "mypy"],
 }
 
 # The rest you shouldn't have to touch too much :)
@@ -109,6 +111,8 @@ setup(
     # entry_points={
     #     'console_scripts': ['mycli=mymodule:cli'],
     # },
+    setup_requires=["setuptools-yaml"],
+    metadata_yaml="environment.yml",
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,

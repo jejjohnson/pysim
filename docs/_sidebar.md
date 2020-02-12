@@ -6,7 +6,7 @@
 * [RV Coefficient](linear/rv.md)
 * [HSIC](kernel/hsic.md)
 * [MMD](kernel/mmd.md)
-* [Mutual Information](kernel/mi.md)
+* [Mutual Information](information/mi.md)
 * [Variation of Information](information/vi.md)
 
 **Supplementary**

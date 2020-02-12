@@ -7,9 +7,9 @@
 - [Idea](#idea)
 - [Formulation](#formulation)
   - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary)
-  - [**<summary><font color="blue">Code</font></summary>**](#summaryfont-color%22blue%22codefontsummary)
 - [Kernel Trick](#kernel-trick)
 - [Empirical Estimate](#empirical-estimate)
+  - [**<summary><font color="blue">Code</font></summary>**](#summaryfont-color%22blue%22codefontsummary)
 - [Equivalence](#equivalence)
   - [KL-Divergence](#kl-divergence)
   - [Variation of Information](#variation-of-information)
@@ -73,30 +73,7 @@ $$
 \end{aligned}
 $$
 
-### **<summary><font color="blue">Code</font></summary>**
 
-```python
-# Term 1
-c1 = 1 / ( m * (m - 1))
-A = np.sum(Kxx - np.diag(np.diagonal(Kxx)))
-
-# Term II
-c2 = 1 / (n * (n - 1))
-B = np.sum(Kyy - np.diag(np.diagonal(Kyy)))
-
-# Term III
-c3 = 1 / (m * n)
-C = np.sum(Kxy)
-
-# estimate MMD
-mmd_est = c1 * A + c2 * B - 2 * c3 * C
-```
-
-**Sources**
-
-* [Douglas Sutherland](https://github.com/dougalsutherland/opt-mmd/blob/master/two_sample/mmd.py)
-* [HSIC BottleNeck](https://github.com/choasma/HSIC-bottleneck/blob/master/source/hsicbt/math/hsic.py)
-* [Eugene Belilovsky](https://github.com/eugenium/MMD/blob/master/mmd.py)
 
 ---
 
@@ -131,6 +108,31 @@ $$
 
 \end{aligned}
 $$
+
+### **<summary><font color="blue">Code</font></summary>**
+
+```python
+# Term 1
+c1 = 1 / ( m * (m - 1))
+A = np.sum(Kxx - np.diag(np.diagonal(Kxx)))
+
+# Term II
+c2 = 1 / (n * (n - 1))
+B = np.sum(Kyy - np.diag(np.diagonal(Kyy)))
+
+# Term III
+c3 = 1 / (m * n)
+C = np.sum(Kxy)
+
+# estimate MMD
+mmd_est = c1 * A + c2 * B - 2 * c3 * C
+```
+
+**Sources**
+
+* [Douglas Sutherland](https://github.com/dougalsutherland/opt-mmd/blob/master/two_sample/mmd.py)
+* [HSIC BottleNeck](https://github.com/choasma/HSIC-bottleneck/blob/master/source/hsicbt/math/hsic.py)
+* [Eugene Belilovsky](https://github.com/eugenium/MMD/blob/master/mmd.py)
 
 ---
 
@@ -191,8 +193,6 @@ where we have some equivalences.
 
 
 
-* $$
-* 
 
 ### **<summary><font color="red">Proof</font></summary>**
 
