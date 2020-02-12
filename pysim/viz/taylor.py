@@ -41,7 +41,7 @@ class TaylorDiagram:
         subplot: Optional[int] = 111,
         extend_angle: bool = False,
         corr_labels: Optional[np.ndarray] = None,
-        corr_range: Tuple[float, float] = (0, 10),
+        ref_range: Tuple[float, float] = (0, 10),
         ref_label: str = "Reference Point",
         angle_label: str = "Correlation",
         var_label: str = "Standard Deviation",
@@ -70,8 +70,8 @@ class TaylorDiagram:
             fig = plt.figure(figsize=(8, 8))
 
         # extend or not
-        self.smin = corr_range[0] * ref_point
-        self.smax = (corr_range[1] / 100) * ref_point + ref_point
+        self.smin = ref_range[0] * ref_point
+        self.smax = (ref_range[1] / 100) * ref_point + ref_point
 
         corr_ticks = np.arccos(corr_labels)
         gl1 = grid_finder.FixedLocator(corr_ticks)

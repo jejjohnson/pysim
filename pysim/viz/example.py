@@ -1,59 +1,239 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import argparse
 
 plt.style.use(["seaborn-talk"])
 
-from matplotlib.projections import PolarAxes
-from mpl_toolkits.axisartist import floating_axes, grid_finder
+from taylor import TaylorDiagram
 
 
-ref_pt = 10.0
-ref_label = "Reference Point"
+def demo_simple() -> None:
 
-angle_ax_label = r"Correlation"
-x_ax_label = r"Standard Deviation"
+    # reference point
+    ref_point = 9.0
 
-# Extend for Standard Deviation
-prnt_ext = (0, 1.25)
-smin = prnt_ext[0] * ref_pt
-smax = prnt_ext[1] * ref_pt
+    # correlation range
+    ref_range = (0, 50)
 
-# polar axis transform
-tr = PolarAxes.PolarTransform()
+    # model comparison points
+    model_stats = [
+        (0.9, 3),  # high correlation, low variance
+        (0.1, 9),  # low correlation, similar variance
+        (0.6, 11),  # ok correlation, similar variance
+    ]
 
-# Correlation Labels
-rlocs = np.array([0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99, 1.0])
+    # =======================
+    # Init Figure
+    # =======================
+    fig = plt.figure(figsize=(10, 10))
 
-# TODO - extend to negative correlations
-tmax = np.pi / 2.0
+    # add taylor diagram to plot
+    taylor_fig = TaylorDiagram(
+        ref_point=ref_point,
+        fig=fig,
+        subplot=111,
+        extend_angle=False,
+        ref_range=ref_range,
+    )
+    # ========================
+    # plot reference point
+    # ========================
+    taylor_fig.add_reference_point(
+        ref_point,
+        color="black",
+        marker=".",
+        markersize=20,
+        linestyle="",
+        label="Reference Data",
+    )
 
-# convert correlation labels to polar angles
-tlocs = np.arccos(rlocs)
+    # ========================
+    # plot reference line
+    # ========================
+    taylor_fig.add_reference_line(ref_point, color="black", linestyle="--", label="_")
 
-# positions on grid
-gl1 = grid_finder.FixedLocator(tlocs)
+    # ========================
+    # add grid
+    # ========================
+    taylor_fig.add_grid()
 
-# create ticks
-tf1 = grid_finder.DictFormatter(dict(zip(tlocs, map(str, rlocs))))
+    # ========================
+    # add contours
+    # ========================
+    taylor_fig.add_contours(ref_point, levels=3, colors="gray")
 
-ghelper = floating_axes.GridHelperCurveLinear(
-    aux_trans=tr, extremes=(0, tmax, smin, smax), grid_locator1=gl1, tick_formatter1=tf1
-)
-print(tr)
-print((0, tmax, smin, smax))
-print(gl1)
-print(tf1)
-plt.style.use(["seaborn-poster"])
+    # modify contour labels
+    taylor_fig.polar_axes.clabel(taylor_fig.contours, inline=1, fontsize=20, fmt="%.1f")
 
-fig = plt.figure(figsize=(8, 8))
+    # ========================
+    # add samples
+    # ========================
+    colors = ["red", "green", "blue"]
+    names = ["Model I", "Model II", "Model III"]
 
-subplot = 111
-print(fig)
-print(subplot)
-print(ghelper)
-ax = floating_axes.FloatingSubplot(fig, subplot, grid_helper=ghelper)
+    for i, isample in enumerate(model_stats):
+        taylor_fig.add_point(
+            isample[1],
+            isample[0],
+            color=colors[i],
+            markersize=20,
+            linestyle="",
+            marker=".",
+            label=names[i],
+            zorder=3,
+        )
 
-fig.add_subplot(ax)
+    # ========================
+    # add samples
+    # ========================
+    taylor_fig.add_legend(fig, numpoints=1, prop=dict(size="large"), loc="upper right")
+    # show plot
+    plt.show()
 
-plt.show()
+    return None
 
+
+def demo_scatter() -> None:
+
+    # ====================
+    # Reference Data
+    # ====================
+    ref_point = 9.0
+
+    # reference point range
+    ref_range = (0, 50)  # 0% less as min, 50% more as max
+
+    # model comparison points
+
+    # =========================
+    # Model Comparison Points
+    # =========================
+
+    # SAMPLE I
+    np.random.seed(123)
+    n_samples = 10
+    corr_points = np.random.rand(n_samples)
+    var_points = 2 * np.random.random(n_samples) + 5
+    param_points = np.random.rand(n_samples)
+
+    # SAMPLE II
+    np.random.seed(111)
+    n_samples = 10
+    corr_points2 = np.random.rand(n_samples)
+    var_points2 = 2 * np.random.random(n_samples) + 1
+    param_points2 = np.random.rand(n_samples)
+
+    # =======================
+    # Init Figure
+    # =======================
+    fig = plt.figure(figsize=(10, 10))
+
+    # add taylor diagram to plot
+    taylor_fig = TaylorDiagram(
+        ref_point=ref_point,
+        fig=fig,
+        subplot=111,
+        extend_angle=False,
+        corr_range=corr_range,
+    )
+    # ========================
+    # plot reference point
+    # ========================
+    taylor_fig.add_reference_point(
+        ref_point,
+        color="black",
+        marker=".",
+        markersize=20,
+        linestyle="",
+        label="Reference Data",
+    )
+
+    # ========================
+    # plot reference line
+    # ========================
+    taylor_fig.add_reference_line(ref_point, color="black", linestyle="--", label="_")
+
+    # ========================
+    # add grid
+    # ========================
+    taylor_fig.add_grid()
+
+    # ========================
+    # add contours
+    # ========================
+    taylor_fig.add_contours(ref_point, levels=3, colors="gray")
+
+    # modify contour labels
+    taylor_fig.polar_axes.clabel(taylor_fig.contours, inline=1, fontsize=20, fmt="%.1f")
+
+    # ========================
+    # add samples
+    # ========================
+    colors = ["red", "green", "blue"]
+    names = ["Model I", "Model II", "Model III"]
+    import matplotlib
+
+    boundaries = (0.0, 1.0)
+    norm = matplotlib.colors.Normalize(vmin=boundaries[0], vmax=boundaries[1])
+
+    cm = plt.cm.get_cmap("RdYlBu")
+
+    # Samples I
+    taylor_fig.add_scatter(
+        var_points,
+        corr_points,
+        c=param_points,
+        cmap=cm,
+        norm=norm,
+        s=20,
+        marker="*",
+        label="Model I",
+        zorder=3,
+    )
+
+    taylor_fig.add_scatter(
+        var_points2,
+        corr_points2,
+        c=param_points2,
+        cmap=cm,
+        norm=norm,
+        s=20,
+        marker="x",
+        label="Model II",
+        zorder=3,
+    )
+
+    # ========================
+    # add colorbar
+    # ========================
+    # Normalize
+
+    cbar = plt.colorbar(
+        taylor_fig.sample_points[1], fraction=0.046, extend="both", norm=norm
+    )
+    cbar.set_label("Parameter", rotation=270, fontsize=20, labelpad=20)
+
+    # ========================
+    # add legend
+    # ========================
+    taylor_fig.add_legend(fig, numpoints=1, prop=dict(size="large"), loc="upper right")
+    # show plot
+    plt.show()
+
+    return None
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Taylor Diagram demo")
+    parser.add_argument(
+        "--type", type=int, default=1, metavar="T", help="Which demo to run."
+    )
+
+    args = parser.parse_args()
+
+    if args.type == 1:
+        demo_simple()
+    elif args.type == 2:
+        demo_scatter()
+    else:
+        raise ValueError(f"Unrecognized demo: {args.type}")
