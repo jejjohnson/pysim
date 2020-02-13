@@ -17,25 +17,123 @@
 * $\mathbf{X},\mathbf{Y}$ must have different number of samples
 
 ---
-- [Kernel Measures of Similarity](#kernel-measures-of-similarity)
-  - [Covariance Measures](#covariance-measures)
-    - [Uncentered Kernel](#uncentered-kernel)
-    - [Centered Kernel](#centered-kernel)
-      - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic)
-      - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd)
-  - [Kernel Matrix Inversion](#kernel-matrix-inversion)
-      - [Sherman-Morrison-Woodbury](#sherman-morrison-woodbury)
-  - [Kernel Approximation](#kernel-approximation)
-    - [Random Fourier Features](#random-fourier-features)
-    - [Nystrom Approximation](#nystrom-approximation)
-    - [Structured Kernel Interpolation](#structured-kernel-interpolation)
-  - [Correlation Measures](#correlation-measures)
-    - [Uncentered Kernel](#uncentered-kernel-1)
-      - [Kernel Alignment (KA)](#kernel-alignment-ka)
-    - [Uncentered Kernel](#uncentered-kernel-2)
-      - [Centered Kernel Alignment (cKA)](#centered-kernel-alignment-cka)
-  - [Supplementary](#supplementary)
-  - [Ideas](#ideas)
+- [Probabilities in Feature Space: The Mean Trick](#probabilities-in-feature-space-the-mean-trick)
+    - [Mean Embedding](#mean-embedding)
+    - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd)
+    - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic)
+- [Covariance Measures](#covariance-measures)
+  - [Uncentered Kernel](#uncentered-kernel)
+  - [Centered Kernel](#centered-kernel)
+    - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic-1)
+    - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd-1)
+- [Kernel Matrix Inversion](#kernel-matrix-inversion)
+    - [Sherman-Morrison-Woodbury](#sherman-morrison-woodbury)
+- [Kernel Approximation](#kernel-approximation)
+  - [Random Fourier Features](#random-fourier-features)
+  - [Nystrom Approximation](#nystrom-approximation)
+  - [Structured Kernel Interpolation](#structured-kernel-interpolation)
+- [Correlation Measures](#correlation-measures)
+  - [Uncentered Kernel](#uncentered-kernel-1)
+    - [Kernel Alignment (KA)](#kernel-alignment-ka)
+  - [Uncentered Kernel](#uncentered-kernel-2)
+    - [Centered Kernel Alignment (cKA)](#centered-kernel-alignment-cka)
+- [Supplementary](#supplementary)
+- [Ideas](#ideas)
+
+---
+
+
+### Feature Map
+
+We have a function $\varphi(X)$ to map $\mathcal{X}$ to some feature space $\mathcal{F}$.
+
+$$\phi(X) = \left[ \cdots, \varphi_i(x), \cdots \right] \in N$$
+
+### Function Class
+
+Reproducing Kernel Hilbert Space $\mathcal{H}$ with kernel $k$.
+
+Evaluation functionals 
+
+$$f(x) = \langle k(x,\cdot), f \rangle$$
+
+We can compute means via linearity
+
+$$
+\begin{aligned}
+\mathbb{E}_{X \sim P} \left[ f(X) \right] 
+&=
+\mathbb{E}_{X \sim P} \left[ \langle k(x, \cdot), f \rangle  \right] \\
+&=
+\bigg\langle \mathbb{E}_{X \sim P} \left[   k(x, \cdot)\right], f   \bigg\rangle \\
+&=
+\langle \mu_P, f \rangle
+\end{aligned}
+$$
+
+And empirically
+
+$$
+\begin{aligned}
+\frac{1}{N} \sum_{i=1}^N f(x_i)
+&=
+\frac{1}{N} \sum_{i=1}^N \langle k(x, \cdot), f \rangle \\
+&=
+\bigg\langle \frac{1}{N} \sum_{i=1}^N k(x, \cdot), f   \bigg\rangle \\
+&=
+\langle \mu_X, f \rangle
+\end{aligned} 
+$$
+
+### Kernels
+
+This allows us to not have to explicitly calculate $\varphi(X)$. We just need an algorithm that calculates the dot product between them.
+
+$$\langle \varphi(X), \varphi(X') \rangle_\mathcal{F} = k(X, X')$$
+
+### Reproducing Kernel Hilbert Space Notation
+
+**Reproducing Property**
+
+$$\langle f, k(x,\cdot) \rangle = f(x)$$
+
+Equivalence between $\phi(x)$ and $k(x,\cdot)$.
+
+$$\langle k(x, \cdot), k(x', \cdot) \rangle = k(x, x')$$
+
+---
+
+## Probabilities in Feature Space: The Mean Trick
+
+
+#### Mean Embedding
+
+$$\mu_k(\mathbb{P}) \coloneqq \int_\mathcal{X} \underbrace{\psi(x)}_{k(\cdot,x)} d\mathbb{P}(x) \in \mathcal{H}_k$$
+
+#### Maximum Mean Discrepency (MMD)
+
+$$\text{MMD}_k(\mathbb{P}, \mathbb{Q}) \coloneqq || \mu_k(\mathbb{P}) - \mu_k(\mathbb{Q}) \in ||_{\mathcal{H}_k}$$
+
+
+#### Hilbert-Schmidt Independence Criterion (HSIC)
+
+$$\text{HSIC}_k(\mathbb{P}) \coloneqq \text{MMD}_k(\mathbb{P}, \otimes_{m=1}^M \mathbb{P}_m)$$
+
+
+---
+
+Given $\mathbb{P}$ a Borel probability measure on $\mathcal{X}$, we can define a feature map $\mu_P \in \mathcal{F}$.
+
+$$\mu_P = \left[ \ldots \mathbb{E}_P\left[ \varphi_i(\mathbf{x}) \right] \right]$$
+
+Given a positive definite kernel $k(x,x')$, we can define the expectation of the cross kernel as:
+
+$$\mathbb{E}_{P,Q}k(\mathbf{x,y}) = \langle \mu_P, \mu_Q \rangle_\mathcal{F}$$
+
+for $x \sim P$ and $q \sim Q$. We can use the mean trick to define the following:
+
+$$\mathbb{E}_P (f(X)) = \langle \mu_P, f(\cdot) \rangle_\mathcal{F}$$
+
 
 
 ---

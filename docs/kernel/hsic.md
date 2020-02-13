@@ -9,25 +9,23 @@
 
 - [Resources](#resources)
 - [Motivation](#motivation)
-  - [Covariance](#covariance)
-    - [Multidimensional Datasets](#multidimensional-datasets)
-  - [Correlation](#correlation)
-  - [Summarizing Multi-Dimensional Information](#summarizing-multi-dimensional-information)
-  - [Connections](#connections)
-    - [Mutual Information](#mutual-information)
-  - [Samples versus Features](#samples-versus-features)
+- [Covariance](#covariance)
+  - [Gram Matrix](#gram-matrix)
+- [Summarizing Information](#summarizing-information)
   - [Kernel Trick](#kernel-trick)
     - [Centering](#centering)
-  - [Hilbert-Schmidt Criterion](#hilbert-schmidt-criterion)
-  - [Future Outlook](#future-outlook)
+  - [Hilbert-Schmidt Independence Criterion](#hilbert-schmidt-independence-criterion)
+- [Correlation](#correlation)
+  - [Kernel Alignment](#kernel-alignment)
+- [Connections](#connections)
+  - [Mutual Information](#mutual-information)
+- [Randomized HSIC](#randomized-hsic)
 - [Practical Equations](#practical-equations)
   - [Objects of Interest](#objects-of-interest)
-    - [Mean Embedding](#mean-embedding)
-    - [Maximum Mean Discrepency (MMD)](#maximum-mean-discrepency-mmd)
-    - [Hilbert-Schmidt Independence Criterion (HSIC)](#hilbert-schmidt-independence-criterion-hsic)
   - [Linear Algebra](#linear-algebra)
   - [Classical Information Theory](#classical-information-theory)
   - [Tangent Kernel Alignment](#tangent-kernel-alignment)
+- [Future Outlook](#future-outlook)
 - [Literature Review](#literature-review)
   - [Applications](#applications)
   - [Textbooks](#textbooks)
@@ -59,16 +57,19 @@ A very common mechanism to measure the differences between datasets is to measur
 </p> -->
 
 <p align="center">
-  <img src="thesis/appendix/kernels/pics/demo_caseI_reg.png" alt="drawing" width="175"/>
-  <img src="thesis/appendix/kernels/pics/demo_caseII_reg.png" alt="drawing" width="175"/>
-  <img src="thesis/appendix/kernels/pics/demo_caseIII_reg.png" alt="drawing" width="175"/>
-  <img src="thesis/appendix/kernels/pics/demo_caseIV_reg.png" alt="drawing" width="175"/>
+  <img src="kernel/pics/demo_caseI_reg.png" alt="drawing" width="175"/>
+  <img src="kernel/pics/demo_caseII_reg.png" alt="drawing" width="175"/>
+  <img src="kernel/pics/demo_caseIII_reg.png" alt="drawing" width="175"/>
+  <img src="kernel/pics/demo_caseIV_reg.png" alt="drawing" width="175"/>
 </p>
 
 This means measures like the covariance and correlation become useless because they will yield the same result. This requires us to have more robust methods or to do some really good preprocessing to make models easier.
 
----
-### Covariance
+* Multivariate
+* Higher-Order Relations
+* Non-Linear Regresentation
+
+## Covariance
 
 The first measure we need to consider is the covariance. This can be used for a single variable $X$, the covariance, or the cross-covariance between multiple variables $X,Y$. Some key properties include:
 
@@ -80,14 +81,23 @@ The first measure we need to consider is the covariance. This can be used for a 
 For a univariate dataset we can use the following expression.
 
 $$
-\text{C}_{xy} =
-\mathbb{E}\left[(x-\mu_x)(y-\mu_y) \right]
+\Sigma_\mathbf{xy} =
+\mathbb{E}\left[(\mathbf{x}-\mu_\mathbf{x})(\mathbf{y}-\mu_\mathbf{y}) \right]
 $$
 
-We basically need to subtract the mean between all of the samples and then take the joint expectation of the two datasets. This will give us a scalar value which
+We basically need to subtract the mean between all of the samples and then take the joint expectation of the two datasets. This will give us a covariance matrix of size $\Sigma_\mathbf{xy} \in \mathbb{R}^{D \times D}$. So this is a scalar value if $D=1$ and a matrix if $D>1$.
 
 
-#### Multidimensional Datasets
+### Gram Matrix
+
+We could also calculate the covariance between the sets of features, i.e. the Gram matrix.
+
+
+
+
+
+
+## Summarizing Information
 
 In the case of multidimensional datasets, this calculation because a bit more complicated. We don't get a scalar output; we get a covariance matrix $D\times D$. **Note**: this means that the matrix is in the feature space. The diagonal elements will be the covariance between each feature $d$ with itself and the off-diagonal elements will be the cross-covariance between each feature $d_i$ and another feature $d_j$. We can make some observations about the covariance matrices that can give us more information about the structure of our data. There are two important ones:
 
@@ -153,53 +163,6 @@ K_xy = X @ X.T
 ```
 </details>
 
----
-### Correlation
-
-We can use this measure to summarize and normalize our data.
-
-* It is a measure of relationship
-* It is interpretable because it ranges from $-1,1$
-* It isn't affected by isotropic scaling due to the normalization
-* It is unitless because of the normalization
-
-There are many benefits to using this measure which is why it is often used so widely.
-
-$$\rho_{xy} = \frac{C_{xy}}{\sigma_x \sigma_y}$$
-
-
-
----
-
-### Connections
-
-
-#### Mutual Information
-
-This is an approximation to kernel mutual information
-
-$$I(X,Y) = - \frac{1}{2} \log \left( \frac{|C|}{|C_xx||C_yy||} \right)$$
-
-$$I(X,Y) = - \frac{1}{2} \log (1- \rho^2)$$
-
----
-
-### Samples versus Features
-
-One interesting connection is that using the HS norm in the feature space is the sample thing as using it in the sample space.
-
-$$\langle C_{\mathbf{x^\top y}}, C_{\mathbf{x^\top y}}\rangle_{\mathcal{F}} = \langle C_{\mathbf{xx^\top }}, C_{\mathbf{yy^\top}}\rangle_{\mathcal{F}}$$
-
-> Comparing Features is the same as comparing samples!
-
-**Note**: This is very similar to the dual versus sample space that is often mentioned in the kernel literature.
-
-So our equations before will change slightly in notation as we are constructing different matrices. But in the end, they will have the same output. This includes the correlation coefficient $\rho$.
-
-$$    \frac{\langle C_{\mathbf{x^\top y}}, C_{\mathbf{x^\top y}}\rangle_{\mathcal{F}}}{||C_\mathbf{x^\top x}||_{\mathcal{F}} ||C_\mathbf{y^\top y}||_{\mathcal{F}}}
-= 
-    \frac{ \langle C_{\mathbf{xx^\top }}, C_{\mathbf{yy^\top}}\rangle_{\mathcal{F}}}{||C_\mathbf{xx^\top}||_{\mathcal{F}} ||C_\mathbf{yy^\top}||_{\mathcal{F}}}
-$$
 
 ---
 
@@ -212,8 +175,11 @@ $$\langle C_{\mathbf{xx^\top }}, C_{\mathbf{yy^\top}}\rangle_{\mathcal{F}}
 \langle K_{\mathbf{x}}, K_{\mathbf{y}}\rangle_\mathcal{F}
 $$
 
+---
 
 #### Centering
+
+
 
 A very important but subtle point is that the method with kernels assumes that your data is centered in the kernel space. This isn't necessarily true. Fortunately it is easy to do so.
 
@@ -277,9 +243,13 @@ And like the covariance, we can also summarize the data structures with a correl
 
 $$\rho_\mathbf{xy}=\frac{ \langle K_{\mathbf{x}}, K_{\mathbf{y}}\rangle_\mathcal{F}}{||K_\mathbf{x}||_{\mathcal{F}} ||K_\mathbf{y}||_{\mathcal{F}}}$$
 
+
 ---
 
-### Hilbert-Schmidt Criterion
+
+
+
+### Hilbert-Schmidt Independence Criterion
 
 Let's assume there exists a nonlinear mapping from our data space to the Hilbert space. So $\phi : \mathcal{X} \rightarrow \mathcal{F}$ and $\psi : \mathcal{Y} \rightarrow \mathcal{G}$. We also assume that there is a representation of this mapping via the dot product between the features of the data space; i.e. $K_x(x,x') = \langle \phi(x), \phi(x') \rangle$ and $K_y(y,y') = \langle \psi(y), \psi(y') \rangle$. So now the data matrices are $\Phi \in \mathbb{R}^{N\times N_\mathcal{F}}$ and $\Psi \in \mathbb{R}^{N \times N_\mathcal{G}}$. So we can take the kernelized version of the cross covariance mapping as defined for the covariance matrix:
 
@@ -371,22 +341,62 @@ hsic_score = np.einsum("ji,ij->", K_x, K_y)
 
 </details>
 
+
 ---
 
-### Future Outlook
+## Correlation
 
-**Advantages**
+We can use this measure to summarize and normalize our data.
 
-* Sample Space - Nice for High Dimensional Problems w/ a low number of samples
-* HSIC can estimate dependence between variables of different dimensions
-* Very flexible: lots of ways to create kernel matices
+* It is a measure of relationship
+* It is interpretable because it ranges from $-1,1$
+* It isn't affected by isotropic scaling due to the normalization
+* It is unitless because of the normalization
 
-**Disadvantages**
+There are many benefits to using this measure which is why it is often used so widely.
 
-* Computationally demanding for large scale problems
-* Non-iid samples, e.g. speech or images
-* Tuning Kernel parameters
-* Why the HS nrm?
+$$\rho_{xy} = \frac{C_{xy}}{\sigma_x \sigma_y}$$
+
+And the multidimensional case is:
+
+$$
+\begin{aligned}
+\rho V(\mathbf{x,y}) 
+&=
+\frac{\langle \mathbf{W_x, W_y}\rangle_F}{||\mathbf{W_x}||_F \; ||\mathbf{W_y}||_F} \\
+\end{aligned}
+$$
+
+### Kernel Alignment
+
+$$A(K_x, K_y) = 
+\frac{\left\langle K_x, K_y \right\rangle_{F}}{\sqrt{|| K_x||_{F}|| K_y ||_{F}}}
+$$
+
+The alignment can be seen as a similarity score based on the cosine of the angle. For arbitrary matrices, this score ranges between -1 and 1. But using positive semidefinite Gram matrices, the score is lower-bounded by 0.
+
+**Centered Kernel Tangent Alignment**
+
+$$A(H K_{x}, H K_{y}) = 
+\frac{\left\langle H K_{x}, H K_{y} \right\rangle_{F}}{\sqrt{|| H K_{x}||_{F}|| H K_{y} ||_{F}}}
+$$
+They add a normalization term to deal with some of the shortcomings of the original KTA algorithm which had some benefits e.g. a way to cancel out unbalanced class effects. The improvement over the original algorithm seems minor but there is a critical difference. Without the centering, the alignment does not correlate well to the performance of the learning machine. 
+
+
+---
+
+## Connections
+
+
+### Mutual Information
+
+This is an approximation to kernel mutual information
+
+$$I(X,Y) = - \frac{1}{2} \log \left( \frac{|C|}{|C_xx||C_yy||} \right)$$
+
+$$I(X,Y) = - \frac{1}{2} \log (1- \rho^2)$$
+
+
 
 ---
 
@@ -442,18 +452,7 @@ $$$$
 ### Objects of Interest
 
 
-#### Mean Embedding
 
-$$\mu_k(\mathbb{P}) \coloneqq \int_\mathcal{X} \underbrace{\psi(x)}_{k(\cdot,x)} d\mathbb{P}(x) \in \mathcal{H}_k$$
-
-#### Maximum Mean Discrepency (MMD)
-
-$$\text{MMD}_k(\mathbb{P}, \mathbb{Q}) \coloneqq || \mu_k(\mathbb{P}) - \mu_k(\mathbb{Q}) \in ||_{\mathcal{H}_k}$$
-
-
-#### Hilbert-Schmidt Independence Criterion (HSIC)
-
-$$\text{HSIC}_k(\mathbb{P}) \coloneqq \text{MMD}_k(\mathbb{P}, \otimes_{m=1}^M \mathbb{P}_m)$$
 
 ---
 ### Linear Algebra
@@ -480,24 +479,22 @@ $$I(\mathbb{P})=D_{KL}\left( \mathbb{P}, \otimes_{m=1}^{M}\mathbb{P}_m \right)$$
 
 **HSIC**
 
+---
 
-$$A(K_x, K_y) = 
-\left\langle H K_x, H K_y \right\rangle_{F}
-$$
-**Original Kernel Tangent Alignment**
+## Future Outlook
 
-$$A(K_x, K_y) = 
-\frac{\left\langle K_x, K_y \right\rangle_{F}}{\sqrt{|| K_x||_{F}|| K_y ||_{F}}}
-$$
+**Advantages**
 
-The alignment can be seen as a similarity score based on the cosine of the angle. For arbitrary matrices, this score ranges between -1 and 1. But using positive semidefinite Gram matrices, the score is lower-bounded by 0.
+* Sample Space - Nice for High Dimensional Problems w/ a low number of samples
+* HSIC can estimate dependence between variables of different dimensions
+* Very flexible: lots of ways to create kernel matices
 
-**Centered Kernel Tangent Alignment**
+**Disadvantages**
 
-$$A(H K_{x}, H K_{y}) = 
-\frac{\left\langle H K_{x}, H K_{y} \right\rangle_{F}}{\sqrt{|| H K_{x}||_{F}|| H K_{y} ||_{F}}}
-$$
-They add a normalization term to deal with some of the shortcomings of the original KTA algorithm which had some benefits e.g. a way to cancel out unbalanced class effects. The improvement over the original algorithm seems minor but there is a critical difference. Without the centering, the alignment does not correlate well to the performance of the learning machine. 
+* Computationally demanding for large scale problems
+* Non-iid samples, e.g. speech or images
+* Tuning Kernel parameters
+* Why the HS nrm?
 
 
 ---
@@ -514,7 +511,7 @@ This goes over the literature of the kernel alignment method as well as some app
 * Kerneel Target Alignment Parameter: A New Modelability for Regression Tasks - Marcou et al (2016) - [Paper](https://pubs.acs.org/doi/full/10.1021/acs.jcim.5b00539)
 * Brain Activity Patterns - [Paper](https://www.frontiersin.org/articles/10.3389/fnins.2017.00550/full)
 * Scaling - [Paper](https://link.springer.com/article/10.1007/s11222-016-9721-7)
-
+* [Correlations Between Word Vector Sets](https://arxiv.org/pdf/1910.02902.pdf) - Zhelezniak et. al. (2019)
 
 ### Textbooks
 

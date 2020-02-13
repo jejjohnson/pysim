@@ -6,7 +6,6 @@
 * [Correlation](linear/rv.md)
 * [HSIC](kernel/hsic.md)
 * [MMD](kernel/mmd.md)
-
 * [Variation of Information](information/vi.md)
 
 **Supplementary**
