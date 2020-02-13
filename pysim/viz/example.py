@@ -8,7 +8,6 @@ from taylor import TaylorDiagram
 plt.style.use(["seaborn-talk"])
 
 
-
 def demo_simple() -> None:
 
     # reference point
@@ -137,7 +136,7 @@ def demo_scatter() -> None:
         fig=fig,
         subplot=111,
         extend_angle=False,
-        corr_range=corr_range,
+        ref_range=ref_range,
     )
     # ========================
     # plot reference point
@@ -188,7 +187,7 @@ def demo_scatter() -> None:
         c=param_points,
         cmap=cm,
         norm=norm,
-        s=20,
+        s=30,
         marker="*",
         label="Model I",
         zorder=3,
@@ -200,7 +199,7 @@ def demo_scatter() -> None:
         c=param_points2,
         cmap=cm,
         norm=norm,
-        s=20,
+        s=30,
         marker="x",
         label="Model II",
         zorder=3,
@@ -220,7 +219,12 @@ def demo_scatter() -> None:
     # add legend
     # ========================
     taylor_fig.add_legend(fig, numpoints=1, prop=dict(size="large"), loc="upper right")
+
     # show plot
+    # change color of legend colors
+    fig.legends[0].legendHandles[1].set_color("red")
+    fig.legends[0].legendHandles[2].set_color("blue")
+
     plt.show()
 
     return None
@@ -229,7 +233,7 @@ def demo_scatter() -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Taylor Diagram demo")
     parser.add_argument(
-        "--type", type=int, default=1, metavar="T", help="Which demo to run."
+        "--type", type=int, default=2, metavar="T", help="Which demo to run."
     )
 
     args = parser.parse_args()
