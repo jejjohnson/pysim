@@ -5,10 +5,24 @@
 
 ## Conditions
 
+* Non-Linear
+* Multivariate
+* Transformations
+  * Isotropic Scaling
+  * Linear Invertible
+  * Orthogonal Transformations
 
-* Linear Transformations
-* Orthogonal Transformations
-* Isotropic Scaling
+
+
+### Transformations
+
+
+#### Orthogonal Transformations
+
+
+**Source**:
+
+* Orthogonal Projections - Ruochi Zhang - [blog](https://zhangruochi.com/Orthogonal-Projections/2019/09/20/)
 
 
 ---

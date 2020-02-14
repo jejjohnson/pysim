@@ -6,15 +6,16 @@
 
 - [Idea](#idea)
 - [Formulation](#formulation)
-  - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary)
+  - [<font color="red">Proof</font>](#font-color%22red%22prooffont)
 - [Kernel Trick](#kernel-trick)
 - [Empirical Estimate](#empirical-estimate)
-  - [**<summary><font color="blue">Code</font></summary>**](#summaryfont-color%22blue%22codefontsummary)
+  - [<font color="blue">Code</font>](#font-color%22blue%22codefont)
 - [Equivalence](#equivalence)
+  - [Euclidean Distance](#euclidean-distance)
   - [KL-Divergence](#kl-divergence)
   - [Variation of Information](#variation-of-information)
   - [HSIC](#hsic)
-  - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary-1)
+  - [**<summary><font color="red">Proof</font></summary>**](#summaryfont-color%22red%22prooffontsummary)
 - [Resources](#resources)
 
 ---
@@ -37,7 +38,7 @@ MMD^2(P,Q)
 \end{aligned}
 $$
 
-### **<summary><font color="red">Proof</font></summary>**
+### <font color="red">Proof</font>
 
 $$
 \begin{aligned}
@@ -103,7 +104,7 @@ $$
 \end{aligned}
 $$
 
-### **<summary><font color="blue">Code</font></summary>**
+### <font color="blue">Code</font>
 
 ```python
 # Term 1
@@ -131,6 +132,39 @@ mmd_est = c1 * A + c2 * B - 2 * c3 * C
 ---
 
 ## Equivalence
+
+### Euclidean Distance
+
+Let's assume that $\mathbf{x,y}$ come from two distributions, so$\mathbf{x} \sim \mathbb{P}$ and $\mathbf{x} \sim \mathbb{Q}$. We can write the MMD as norm of the difference between the means in feature spaces.
+
+$$
+\text{D}_{ED}(\mathbb{P,Q}) 
+= ||\mu_\mathbf{x} - \mu_\mathbf{y}||^2_F
+= ||\mu_\mathbf{x}||^2_F + ||\mu_\mathbf{y}||^2_F -
+2 \langle \mu_\mathbf{x}, \mu_\mathbf{y}\rangle_F
+$$
+
+
+
+**Empirical Estimation**
+
+This is only good for Gaussian kernels. But we can empirically estimate this as:
+
+$$\text{D}_{ED}(\mathbb{P,Q}) 
+= \frac{1}{N_x^2} 
+\sum_{i=1}^{N_x}\sum_{j=1}^{N_x} 
+\text{G}(\mathbf{x}_i, \mathbf{x}_j) +
+\frac{1}{N_y^2}
+\sum_{i=1}^{N_y}\sum_{j=1}^{N_y}
+\text{G}(\mathbf{y}_i, \mathbf{y}_j) -
+2 \frac{1}{N_x N_y}
+\sum_{i=1}^{N_x}\sum_{j=1}^{N_y}
+\text{G}(\mathbf{x}_i, \mathbf{y}_j)
+$$
+
+where G is the Gaussian kernel with a standard deviation of $\sigma$. 
+
+* Information Theoretic Learning: Renyi's Entropy and Kernel Perspectives - Principe
 
 ---
 

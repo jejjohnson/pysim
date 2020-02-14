@@ -4,22 +4,22 @@ My projects involve trying to compare the outputs of different climate models. T
 
 Another way to measure similarity would be in the family of Information Theory Measures (ITMs). Instead of directly measuring first-order output statistics, these methods summarize the information via a probability distribution function (PDF) of the dataset. These can measure non-linear relationships and are naturally multivariate that offers solutions to the shortcomings of the standard methods. I would like to explore this and see if this is a useful way of summarizing information.
 
-- [Variation of Information](#variation-of-information)
-  - [Example Data](#example-data)
-  - [Standard Methods](#standard-methods)
-    - [Covariance](#covariance)
-      - [Example](#example)
-      - [Example](#example-1)
-      - [Example](#example-2)
-  - [Information Theory](#information-theory)
-    - [Entropy](#entropy)
-    - [Mutual Information](#mutual-information)
-      - [Example](#example-3)
-      - [Normalized Mutual Information](#normalized-mutual-information)
-    - [Variation of Information](#variation-of-information-1)
-    - [RVI-Based Diagram](#rvi-based-diagram)
-      - [Example](#example-4)
-    - [VI-Based Diagram](#vi-based-diagram)
+- [Example Data](#example-data)
+- [Standard Methods](#standard-methods)
+  - [Covariance](#covariance)
+    - [Example](#example)
+    - [Example](#example-1)
+    - [Example](#example-2)
+- [Information Theory](#information-theory)
+  - [Entropy](#entropy)
+  - [Mutual Information](#mutual-information)
+    - [Example](#example-3)
+    - [Normalized Mutual Information](#normalized-mutual-information)
+  - [Variation of Information](#variation-of-information)
+  - [RVI-Based Diagram](#rvi-based-diagram)
+    - [Example](#example-4)
+  - [VI-Based Diagram](#vi-based-diagram)
+- [Resources](#resources)
 
 ---
 
@@ -252,3 +252,10 @@ $$\begin{aligned}
 So, the important quantities needed to be able to plot points on the Taylor diagram are the $\sigma$ and $\theta= \arccos c_{XY}$. If we assume that the observed data is given by $\sigma_{\text{obs}}, \theta=0$, then we can plot the rest of the comparisons via $\sigma_{\text{sim}}, \theta=\arccos c_{XY}$.
 
 **Note**: This eliminates the sign problem. However, I wonder if this measure is actually bounded between 0 and 1. In my preliminary experiments, I had this problem. I was unable to plot this because of values obtained from the $c_{XY}$. They were not between 0 and 1 so the `arccos` function doesn't work for values outside of that range.
+
+
+---
+
+## Resources
+
+* The Mutual Information Diagram for Uncertainty Visualization - Correa & Lindstrom (2012) - [PDF](https://pdfs.semanticscholar.org/6444/05ea4cd033f138154296e58f614a8cd0dbe1.pdf) | [Prezi](https://www.sci.utah.edu/uncertainty2011/presentations/8_Correa-MutualInformationDiagram.pdf)

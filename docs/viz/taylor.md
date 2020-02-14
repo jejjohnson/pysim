@@ -152,8 +152,6 @@ $$d^2(x,y) = ||x-y||^2=||x||^2 + ||y||^2 - 2 \, ||x||\, ||y|| \, \rho(x,y)$$
 This is actually equivalent to the law of cosines.
 
 
----
-
 ## Taylor Diagram
 
 The Taylor Diagram was a way to summarize the data statistics in a way that was easy to interpret. It used the relationship between the covariance, the correlation and the root mean squared error via the triangle inequality. It simultaneously plots the standard deviation, the root mean square error and correlation between two variables.
@@ -182,7 +180,7 @@ So, the important quantities needed to be able to plot points on the Taylor diag
 
 <center>
 <p float='center'> 
-  <img src="viz/pics/taylor_demo.png" width="500" />
+  <img src="viz/pics/taylor_demo.png" width="700" />
 </p>
 
 **Figure III**: An example Taylor diagram.
