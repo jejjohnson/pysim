@@ -258,4 +258,8 @@ So, the important quantities needed to be able to plot points on the Taylor diag
 
 ## Resources
 
+* Comparing Clusterings by the Variation of Information - Meila (2003) - [PDF](https://link.springer.com/chapter/10.1007/978-3-540-45167-9_14)
+* Comparing Clusterings - An Information Based Distance - Meila (2007) - [PDF](https://www.sciencedirect.com/science/article/pii/S0047259X06002016)
+  > Paper discussing the variation of information as a distance measure from a clustering perspective. Does all of the proofs that it is a legit distance measure.
 * The Mutual Information Diagram for Uncertainty Visualization - Correa & Lindstrom (2012) - [PDF](https://pdfs.semanticscholar.org/6444/05ea4cd033f138154296e58f614a8cd0dbe1.pdf) | [Prezi](https://www.sci.utah.edu/uncertainty2011/presentations/8_Correa-MutualInformationDiagram.pdf)
+  > The VI measure in a Taylor diagram format. Uses the variation of information in addition to the slightly modified version.
