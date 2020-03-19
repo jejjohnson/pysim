@@ -10,6 +10,9 @@
 
 **Supplementary**
 * [Information Theory](information/mi.md)
+  * [Information](information/info.md)
+  * [Entropy](information/entropy.md)
+  * [Mutual Information](information/mi.md)
 * [PDF Estimation](information/pdf_est.md)
 * [Linear Algebra](linear/lin_alg.md)
 * [Kernels](kernel/kernel.md)
