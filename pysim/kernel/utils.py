@@ -1,8 +1,94 @@
-from typing import List, Optional
+from typing import List, Optional, Union, NamedTuple
 
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 from sklearn.utils import check_array, check_random_state
+import collections
+
+
+class GammaParam(NamedTuple):
+    """Helpful data holder which stores gamma parameters
+
+    This allows me to iterate really quickly
+    
+    Parameters
+    ----------
+    method : str, default='median'
+        the method to estimate the gamma
+    
+    percent : float, (optional, default=None)
+    
+    scale : float, (optional, default=None)
+        the mutual information value
+
+    Example
+    -------
+    >> from pysim.kernel.utils import GammaParam
+    >> from sklearn import datasets
+    >> X, _ = datasets.make_blobs(n_samples=1_000, n_features=2, random_state=123)
+    >> gamma_estimator = GammaParam(method='median', percent=None, scale=None)
+    >> gamma_X = gamma_estimator.estimate_gamma(X)
+    >> print(gamma_X)
+    0.2747661935717474
+    """
+
+    method: str = "median"
+    percent: Optional[Union[float, int]] = None
+    scale: Optional[Union[float, int]] = None
+
+    def estimate_gamma(self, X: np.ndarray, **kwargs) -> float:
+        """Estimate the gamma parameter from params
+        
+        Parameters
+        ----------
+        X : np.ndarray
+            the data to estimate the gamma
+
+        kwargs : dict, optional
+            any extra keyword arguments to input into the 
+            sigma estimator
+        
+        Returns
+        -------
+        gamma_est : float
+            the estimated gamma value
+        """
+        return estimate_gamma(X, **kwargs)
+
+
+class SigmaParam(NamedTuple):
+    """Helpful data holder which stores:
+    
+    method : str, default='median'
+        the method to estimate the sigma
+    
+    percent : float, (optional, default=None)
+    
+    scale : float, (optional, default=None)
+        the mutual information value"""
+
+    method: str = "median"
+    percent: Optional[Union[float, int]] = None
+    scale: Optional[Union[float, int]] = None
+
+    def estimate_sigma(self, X: np.ndarray, **kwargs) -> float:
+        """Estimate the sigma parameter from params
+        
+        Parameters
+        ----------
+        X : np.ndarray
+            the data to estimate the sigma
+
+        kwargs : dict, optional
+            any extra keyword arguments to input into the 
+            sigma estimator
+        
+        Returns
+        -------
+        sigma_est : float
+            the estimated sigma value
+        """
+        return estimate_sigma(X, **kwargs)
 
 
 def estimate_gamma(
@@ -83,20 +169,20 @@ def estimate_sigma(
 
     if subsample is not None:
         X = rng.permutation(X)[:subsample, :]
-    # print(method, percent)
-    if method == "mean" and percent is None:
-        sigma = np.mean(pdist(X))
 
-    elif method == "mean" and percent is not None:
-        kth_sample = int(percent * n_samples)
-        sigma = np.mean(np.sort(squareform(pdist(X)))[:, kth_sample])
+    if method == "mean":
+        if percent is None:
+            sigma = np.mean(pdist(X))
+        else:
+            kth_sample = int(percent * n_samples)
+            sigma = np.mean(np.sort(squareform(pdist(X)))[:, kth_sample])
 
-    elif method == "median" and percent is None:
-        sigma = np.median(pdist(X))
-
-    elif method == "median" and percent is not None:
-        kth_sample = int(percent * n_samples)
-        sigma = np.median(np.sort(squareform(pdist(X)))[:, kth_sample])
+    elif method == "median":
+        if percent is None:
+            sigma = np.median(pdist(X))
+        else:
+            kth_sample = int(percent * n_samples)
+            sigma = np.median(np.sort(squareform(pdist(X)))[:, kth_sample])
 
     elif method == "silverman":
         sigma = np.power(
@@ -117,7 +203,7 @@ def estimate_sigma(
     return sigma
 
 
-def get_param_grid(
+def get_sigma_grid(
     init_sigma: float = 1.0, factor: int = 2, n_grid_points: int = 20
 ) -> List[float]:
     """Get a standard parameter grid for the cross validation strategy.
@@ -159,27 +245,38 @@ def get_param_grid(
     return param_grid
 
 
-def get_init_gammas(
-    X, Y, method="median", factor=1, percent=None, scale=1.0, n_gammas=100
-):
+def get_gamma_grid(
+    init_gamma: float = 1.0, factor: int = 2, n_grid_points: int = 20
+) -> List[float]:
 
-    # estimate sigma params
-    factor = 1
-    n_gammas = 100
+    # convert to sigma
+    init_sigma = gamma_to_sigma(init_gamma)
+
+    # get sigma grid
+    sigma_grid = get_sigma_grid(init_sigma, factor=factor, n_grid_points=n_grid_points)
+
+    # convert to gamma
+    gamma_grid = gamma_to_sigma(sigma_grid)
+
+    return gamma_grid
+
+
+def get_init_gammas(X, Y=None, method="median", percent=None, scale=1.0):
 
     # Estimate Sigma
     sigma_x = estimate_sigma(X, method=method, percent=percent, scale=scale)
-    sigma_y = estimate_sigma(Y, method=method, percent=percent, scale=scale)
 
-    # init overall sigma is mean between two
-    init_sigma = np.mean([sigma_x, sigma_y])
+    # convert to gamma
+    gamma_x = sigma_to_gamma(sigma_x)
 
-    # get sigma parameter grid
-    sigmas = get_param_grid(init_sigma, factor, n_gammas)
-
-    gammas = sigma_to_gamma(sigmas)
-    init_gamma = sigma_to_gamma(init_sigma)
-    return init_gamma, gammas
+    if Y is None:
+        return gamma_x
+    else:
+        # estimate sigma for X
+        sigma_y = estimate_sigma(Y, method=method, percent=percent, scale=scale)
+        # convert to gamma
+        gamma_y = sigma_to_gamma(sigma_y)
+        return gamma_x, gamma_y
 
 
 def gamma_to_sigma(gamma: float) -> float:
@@ -202,4 +299,3 @@ def sigma_to_gamma(sigma: float) -> float:
                  2 * sigma^2
     """
     return 1 / (2 * sigma ** 2)
-

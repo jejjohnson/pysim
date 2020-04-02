@@ -7,7 +7,7 @@ from sklearn.metrics.pairwise import linear_kernel, pairwise_kernels
 from sklearn.preprocessing import KernelCenterer
 from sklearn.utils import check_array, check_random_state
 
-from utils import estimate_gamma
+from .utils import estimate_gamma
 
 
 class HSIC(BaseEstimator):
@@ -96,7 +96,6 @@ class HSIC(BaseEstimator):
         kernel_params: Optional[dict] = None,
         random_state: Optional[int] = None,
         center: Optional[int] = True,
-        normalized: Optional[bool] = True,
         subsample: Optional[int] = None,
         bias: bool = True,
     ):
@@ -135,12 +134,6 @@ class HSIC(BaseEstimator):
         self.X_train_ = X
         self.Y_train_ = Y
 
-        # estimate the gamma parameter
-        if self.gamma_X is None:
-            self.gamma_X = estimate_gamma(X)
-        if self.gamma_Y is None:
-            self.gamma_Y = estimate_gamma(Y)
-
         # Calculate the kernel matrices
         K_x = self.compute_kernel(X, gamma=self.gamma_X)
         K_y = self.compute_kernel(Y, gamma=self.gamma_Y)
@@ -161,10 +154,16 @@ class HSIC(BaseEstimator):
 
         return self
 
-    def compute_kernel(self, X, Y=None, gamma=1.0):
+    def compute_kernel(self, X, Y=None, gamma=None):
+        # check if kernel is callable
         if callable(self.kernel):
             params = self.kernel_params or {}
         else:
+            # estimate the gamma parameter
+            if gamma is None:
+                gamma = estimate_gamma(X)
+
+            # set parameters for pairwise kernel
             params = {"gamma": gamma, "degree": self.degree, "coef0": self.coef0}
         return pairwise_kernels(X, Y, metric=self.kernel, filter_params=True, **params)
 
@@ -324,11 +323,6 @@ class RandomizedHSIC(BaseEstimator):
         self.Y_train_ = Y
 
         # Calculate Kernel Matrices
-        if self.gamma_X is None:
-            self.gamma_X = estimate_gamma(X)
-        if self.gamma_Y is None:
-            self.gamma_Y = estimate_gamma(Y)
-
         Zx = self.compute_kernel(X, gamma=self.gamma_X)
         Zy = self.compute_kernel(Y, gamma=self.gamma_Y)
 
@@ -363,7 +357,11 @@ class RandomizedHSIC(BaseEstimator):
 
         return self
 
-    def compute_kernel(self, X, Y=None, gamma=1.0, *args, **kwargs):
+    def compute_kernel(self, X, Y=None, gamma=None, *args, **kwargs):
+
+        # estimate gamma if None
+        if gamma is None:
+            gamma = estimate_gamma(X)
 
         # initialize RBF kernel
         nystrom_kernel = Nystroem(
