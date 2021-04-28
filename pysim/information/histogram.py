@@ -4,10 +4,7 @@ from scipy import stats
 
 
 def hist_entropy(
-    X: np.ndarray,
-    bins: Union[str, int] = "auto",
-    correction: bool = True,
-    hist_kwargs: Optional[Dict] = {},
+    X: np.ndarray, bins: Union[str, int] = "auto", correction: bool = True, **kwargs,
 ) -> float:
     """Calculates the entropy using the histogram of a univariate dataset.
     Option to do a Miller Maddow correction.
@@ -43,7 +40,7 @@ def hist_entropy(
     array(2.52771628)
     """
     # get histogram
-    hist_counts = np.histogram(X, bins=bins, **hist_kwargs)
+    hist_counts = np.histogram(X, bins=bins, **kwargs)
 
     # create random variable
     hist_dist = stats.rv_histogram(hist_counts)
@@ -52,7 +49,7 @@ def hist_entropy(
     H = hist_dist.entropy()
 
     # MLE Estimator with Miller-Maddow Correction
-    if correction == True:
+    if correction is True:
         H += 0.5 * (np.sum(hist_counts[0] > 0) - 1) / hist_counts[0].sum()
 
     return H

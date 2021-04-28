@@ -1,10 +1,10 @@
 import numpy as np
 from scipy import stats
 from typing import Union, Optional, Dict
-from .histogram import hist_entropy
-from .knn import knn_entropy
-from .kde import kde_entropy_uni
-from .gaussian import gauss_entropy_uni, gauss_entropy_multi
+from pysim.information.histogram import hist_entropy
+from pysim.information.knn import knn_entropy
+from pysim.information.kde import kde_entropy_uni
+from pysim.information.gaussian import gauss_entropy_uni, gauss_entropy_multi
 from sklearn.utils import check_array
 
 
@@ -38,6 +38,9 @@ def marginal_entropy(X: np.ndarray, method: str = "histogram", **kwargs) -> np.n
     X = check_array(X, ensure_2d=True)
 
     n_samples, n_features = X.shape
+
+    msg = "n_features is less than or equal to 2. Please use Univariate instead."
+    assert 1 < n_features, msg
 
     H_entropy = np.empty(n_features)
     for i, ifeature in enumerate(X.T):

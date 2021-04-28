@@ -299,3 +299,36 @@ def sigma_to_gamma(sigma: float) -> float:
                  2 * sigma^2
     """
     return 1 / (2 * sigma ** 2)
+
+
+from typing import Tuple, Optional, Callable
+from sklearn.utils import check_random_state
+import numpy as np
+from sklearn.utils import gen_batches, check_array
+from joblib import Parallel, delayed
+
+
+def subset_indices(
+    X: np.ndarray, subsample: Optional[int] = None, random_state: int = 123,
+) -> Tuple[np.ndarray, np.ndarray]:
+
+    if subsample is not None and subsample < X.shape[0]:
+        rng = check_random_state(random_state)
+        indices = np.arange(X.shape[0])
+        subset_indices = rng.permutation(indices)[:subsample]
+        X = X[subset_indices, :]
+
+    return X
+
+
+def subsample_data(X, n_samples: int = 1_000, seed: int = 123):
+
+    rng = np.random.RandomState(seed)
+
+    if n_samples < X.shape[0]:
+
+        idx = rng.permutation(n_samples)[:n_samples]
+
+        X = X[idx]
+
+    return X

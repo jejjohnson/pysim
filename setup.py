@@ -17,20 +17,22 @@ DESCRIPTION = "Python similarity measures."
 URL = "https://github.com/jejjohnson/pysim"
 EMAIL = "jemanjohnson34@gmail.com"
 AUTHOR = "J. Emmanuel Johnson"
-REQUIRES_PYTHON = ">=3.6.0"
-VERSION = "0.1.0"
+REQUIRES_PYTHON = ">=3.7.0"
+VERSION = "0.2.0"
 
 # What packages are required for this module to be executed?
 REQUIRED = [
     "numpy",
     "scipy",
     "scikit-learn",
+    "statsmodels",
+    "joblib",
+    "matplotlib",
+    "seaborn",
 ]
 
 # What packages are optional?
-EXTRAS = {
-    "dev": ["matplotlib", "black", "isort", "mypy"],
-}
+EXTRAS = {"dev": ["matplotlib", "black", "isort", "mypy"]}
 
 # The rest you shouldn't have to touch too much :)
 # ------------------------------------------------

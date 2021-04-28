@@ -14,3 +14,6 @@ dependences:
 - black
 - pip
 - mypy
+- isort
+- pylint
+- flake8
