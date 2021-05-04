@@ -23,8 +23,8 @@ VERSION = "0.2.0"
 # What packages are required for this module to be executed?
 REQUIRED = [
     "numpy",
-    "scipy",
-    "scikit-learn",
+    "scipy>=1.6",
+    "scikit-learn>=0.24",
     "statsmodels",
     "joblib",
     "matplotlib",

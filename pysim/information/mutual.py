@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Optional, Callable
-from .entropy import univariate_entropy, multivariate_entropy
+
+# from .entropy import univariate_entropy, multivariate_entropy
 from sklearn.utils import check_array
 
 

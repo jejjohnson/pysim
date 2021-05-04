@@ -15,10 +15,76 @@ def gauss_entropy_uni(X: np.ndarray) -> None:
 
 def gauss_entropy_multi(X: np.ndarray) -> None:
 
+    n_samples, n_features = X.shape
+
+    # remove mean
     mean = X.mean(axis=0)
-    cov = np.cov(X.T)
+
+    # calculate covariance
+    if n_features > 1:
+        cov = np.cov(X, bias=1, rowvar=False)
+    else:
+        cov = np.array([[np.var(X.T, ddof=1)]])
 
     # assume it's a Gaussian
+    cov += 1e-8 * np.eye(n_features)
     norm_dist = stats.multivariate_normal(mean=mean, cov=cov)
 
     return norm_dist.entropy()
+
+
+def gauss_entropy_multi_v2(X: np.ndarray) -> None:
+
+    n_samples, n_features = X.shape
+
+    # remove mean
+    mean = X.mean(axis=0)
+
+    # calculate covariance
+    if n_features > 1:
+        cov = np.cov(X, bias=1, rowvar=False)
+    else:
+        cov = np.array([[np.var(X.T, ddof=1)]])
+
+    corr = covar_to_corr(cov)
+    n = corr.shape[0]  # dimension
+    from scipy.linalg import det
+
+    return 0.5 * n * (1 + np.log(2 * np.pi)) + 0.5 * np.log(abs(det(corr)))
+
+
+def covar_to_corr(C):
+    assert np.allclose(C, C.T), "Covariance matrix not symmetric"
+    d = 1 / np.sqrt(np.diag(C))
+    # same as np.diag(d) @ C @ np.diag(d), but using broadcasting
+    return d * (d * C).T
+
+
+def gaussian_entropy_symmetric(C):
+
+    assert C.shape[0] == C.shape[1]
+
+    n_features = C.shape[0]
+
+    # closed form solution
+    H = (
+        n_features / 2.0
+        + (n_features / 2.0) * np.log(2 * np.pi)
+        + 0.5 * np.linalg.slogdet(C)[1]
+    )
+
+    return H
+
+
+def gaussian_entropy(C):
+
+    n_features = C.shape[0]
+
+    # closed form solution
+    H = (
+        n_features / 2.0
+        + (n_features / 2.0) * np.log(2 * np.pi)
+        + 0.5 * np.linalg.slogdet(C.T @ C)[1]
+    )
+
+    return H
