@@ -1,8 +1,16 @@
 import numpy as np
-from typing import Optional, Callable
+from typing import Optional, Callable, NamedTuple
 
 # from .entropy import univariate_entropy, multivariate_entropy
 from sklearn.utils import check_array
+
+
+class MIData(NamedTuple):
+    H_X: np.ndarray
+    H_Y: np.ndarray
+    H_XY: np.ndarray
+    H_marg: np.ndarray
+    MI: np.ndarray
 
 
 def mutual_information(X: np.ndarray, f: Callable, **kwargs) -> float:
@@ -36,13 +44,7 @@ def multivariate_mutual_information(
     # H = sum h_i - H(X, ...)
     mi = H_marg - H_xy
 
-    return {
-        "mi": mi,
-        "H_xy": H_xy,
-        "H_marg": H_marg,
-        "H_x": H_x,
-        "H_y": H_y,
-    }
+    return MIData(MI=mi, H_XY=H_xy, H_marg=H_marg, H_X=H_x, H_Y=H_y,)
 
 
 def total_correlation(X: np.ndarray, f: Callable, **kwargs) -> float:

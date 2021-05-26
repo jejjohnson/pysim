@@ -28,6 +28,7 @@ def generate_studentt_data(
 
     # generate random matrix
     C = make_spd_matrix(n_dim=int(n_features), random_state=seed)
+    C += 1e-8 * np.eye(int(n_features))
 
     # joint covariance matrix
     mu = np.zeros((n_features))
@@ -39,6 +40,9 @@ def generate_studentt_data(
 
     # subsample
     data = data_original[:n_samples]
+
+    if data.ndim < 2:
+        data = data[:, None]
 
     # compute marginal entropy
     if df < 2.0:
@@ -79,7 +83,6 @@ def generate_studentt_mi_data(
 
     # generate random gaussian sample
     # create seed (trial number)
-    rng = np.random.RandomState(seed=int(seed + 100))
     # generate samples
     data_original = multivariate_t(loc=mu, shape=C, df=df, seed=seed + 100).rvs(
         size=(n_samples)

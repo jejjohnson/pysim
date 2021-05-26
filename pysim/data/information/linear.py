@@ -3,14 +3,36 @@ from typing import Callable, Dict, Optional, NamedTuple, List
 
 
 def generate_linear_entropy_data(
-    n_samples,
-    n_features,
+    n_samples: int,
+    n_features: int,
     marg_h_estimator: Callable,
     estimator_name: Optional[str] = None,
     seed: int = 123,
     n_base_samples: int = 500_000,
     **kwargs,
 ) -> Dict:
+    """[summary]
+
+    Parameters
+    ----------
+    n_samples : int
+        the number of samples to generate
+    n_features : int
+        number of features to for the generated data
+    marg_h_estimator : Callable
+        marginal entropy estimator
+    estimator_name : Optional[str], optional
+        [description], by default None
+    seed : int, optional
+        [description], by default 123
+    n_base_samples : int, optional
+        [description], by default 500_000
+
+    Returns
+    -------
+    Dict
+        [description]
+    """
     # create seed (trial number)
     rng = np.random.RandomState(seed=int(seed))
 
@@ -49,6 +71,7 @@ def generate_linear_entropy_data(
     return RotationEntropyData(
         X=data,
         A=A,
+        data=data_original,
         H=H_ori_nats,
         H_marg=H_marg,
         seed=seed,
@@ -60,6 +83,7 @@ def generate_linear_entropy_data(
 class RotationEntropyData(NamedTuple):
     X: np.ndarray
     A: np.ndarray
+    data: np.ndarray
     H: float
     H_marg: List[int]
     dataset: str

@@ -28,29 +28,9 @@ def gauss_entropy_multi(X: np.ndarray) -> None:
 
     # assume it's a Gaussian
     cov += 1e-8 * np.eye(n_features)
-    norm_dist = stats.multivariate_normal(mean=mean, cov=cov)
+    norm_dist = stats.multivariate_normal(mean=mean, cov=cov, allow_singular=True)
 
     return norm_dist.entropy()
-
-
-def gauss_entropy_multi_v2(X: np.ndarray) -> None:
-
-    n_samples, n_features = X.shape
-
-    # remove mean
-    mean = X.mean(axis=0)
-
-    # calculate covariance
-    if n_features > 1:
-        cov = np.cov(X, bias=1, rowvar=False)
-    else:
-        cov = np.array([[np.var(X.T, ddof=1)]])
-
-    corr = covar_to_corr(cov)
-    n = corr.shape[0]  # dimension
-    from scipy.linalg import det
-
-    return 0.5 * n * (1 + np.log(2 * np.pi)) + 0.5 * np.log(abs(det(corr)))
 
 
 def covar_to_corr(C):

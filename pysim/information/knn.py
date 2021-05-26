@@ -10,7 +10,7 @@ NOISE = 1e-10
 
 
 def knn_entropy_npeet(
-    X: np.ndarray, n_neighbors: int = 3, seed: int = 123, base: int = 2, **kwargs
+    X: np.ndarray, n_neighbors: int = 3, seed: int = 123, base: int = np.e, **kwargs
 ):
     """Entropy Estimation from the NPEET Toolbox
     Claims of a more numerically stable version
