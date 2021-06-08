@@ -5,7 +5,6 @@ from plum import dispatch
 from typing import Union
 
 
-@dispatch
 def studentt_entropy_symmetric(
     df: Union[float, int, np.ndarray], cov: np.ndarray
 ) -> float:
@@ -62,8 +61,7 @@ def studentt_entropy_symmetric(
     return final_term
 
 
-@dispatch
-def studentt_entropy_symmetric(cov: np.ndarray) -> float:
+def cauchy_entropy_symmetric(cov: np.ndarray) -> float:
     """Entropy for Multivariate Cauchy
     This is the special case of the T-Student Distribution
     when the degrees of freedom are equal to 1.
@@ -110,3 +108,22 @@ def studentt_entropy_symmetric(cov: np.ndarray) -> float:
     final_term = term_a + term_b + term_c
 
     return final_term
+
+
+def studentt_total_corr(df, cov) -> None:
+    H = studentt_entropy_symmetric(df, cov)
+    h_marg = 0
+    for n_dim in range(cov.shape[0]):
+
+        h_marg += studentt_entropy_symmetric(df, cov[n_dim, n_dim].reshape(-1, 1))
+    return h_marg - H
+
+
+def cauchy_total_corr(cov) -> None:
+
+    H = cauchy_entropy_symmetric(cov)
+    h_marg = 0
+    for n_dim in range(cov.shape[0]):
+
+        h_marg += cauchy_entropy_symmetric(cov[n_dim, n_dim].reshape(-1, 1))
+    return h_marg - H

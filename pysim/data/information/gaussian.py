@@ -1,7 +1,10 @@
 import numpy as np
 
 from typing import Callable, Dict, Optional, NamedTuple, List
-from pysim.information.gaussian import gaussian_entropy_symmetric
+from pysim.information.gaussian import (
+    gaussian_entropy_symmetric,
+    gaussian_total_corr_symmetric,
+)
 from sklearn.datasets import make_spd_matrix
 
 
@@ -10,6 +13,7 @@ class GaussianEntropyData(NamedTuple):
     A: np.ndarray
     H: float
     C: np.ndarray
+    TC: float
     H_marg: List[int]
     dataset: str
     estimator: str
@@ -81,6 +85,7 @@ def generate_gaussian_data(
 
     # compute marginal entropy
     H = gaussian_entropy_symmetric(C)
+    TC = gaussian_total_corr_symmetric(C)
 
     return GaussianEntropyData(
         X=data,
@@ -88,6 +93,7 @@ def generate_gaussian_data(
         H=H,
         H_marg=None,
         C=C,
+        TC=TC,
         seed=seed,
         dataset="gaussian",
         estimator=None,
@@ -175,6 +181,9 @@ def generate_gaussian_rotation_data(
     # estimate total entropy
     H_ori = H + np.linalg.slogdet(A)[1]
 
+    C = data_original.T @ data_original
+    TC = gaussian_total_corr_symmetric(C)
+
     # take a subsample
     data = data_original[:n_samples]
 
@@ -183,6 +192,7 @@ def generate_gaussian_rotation_data(
         A=A,
         C=C,
         H=H_ori,
+        TC=TC,
         H_marg=None,
         seed=seed,
         dataset="gaussian",
@@ -241,6 +251,22 @@ def generate_gaussian_mi_data(
 
 
 class GaussianMIData(NamedTuple):
+    n_samples: int
+    n_features: int
+    seed: int
+    X: np.ndarray
+    Y: np.ndarray
+    C: np.ndarray
+    C_X: np.ndarray
+    C_Y: np.ndarray
+    H_X: float
+    H_Y: float
+    H_XY: float
+    MI: float
+    dataset: str
+
+
+class GaussianTCData(NamedTuple):
     n_samples: int
     n_features: int
     seed: int

@@ -59,13 +59,16 @@ def generate_linear_entropy_data(
     data = data_original @ A
 
     # compute marginal entropy
-    H_marg = marg_h_estimator(data, **kwargs)
+    H_X = marg_h_estimator(data, **kwargs)
+    H_Y = marg_h_estimator(data_original, **kwargs)
 
     # estimate total entropy
-    H_ori = np.sum(H_marg) + np.linalg.slogdet(A)[1]
+    H_ori = np.sum(H_Y) + np.linalg.slogdet(A)[1]
+
+    TC = np.sum(H_X) - np.sum(H_Y) + np.linalg.slogdet(A)[1]
 
     # convert to nats
-    H_ori_nats = H_ori * np.log(2)
+    H_ori_nats = H_ori
 
     data = data[:n_samples]
     return RotationEntropyData(
@@ -73,7 +76,9 @@ def generate_linear_entropy_data(
         A=A,
         data=data_original,
         H=H_ori_nats,
-        H_marg=H_marg,
+        H_X=H_X,
+        H_Y=H_Y,
+        TC=TC,
         seed=seed,
         dataset="linear_rotated",
         estimator=estimator_name,
@@ -85,7 +90,9 @@ class RotationEntropyData(NamedTuple):
     A: np.ndarray
     data: np.ndarray
     H: float
-    H_marg: List[int]
+    H_X: float
+    H_Y: float
+    TC: float
     dataset: str
     estimator: str
     seed: int

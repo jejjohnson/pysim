@@ -1,7 +1,12 @@
 import numpy as np
 
 from typing import Callable, Dict, Optional, NamedTuple, List
-from pysim.information.studentt import studentt_entropy_symmetric
+from pysim.information.studentt import (
+    studentt_entropy_symmetric,
+    studentt_total_corr,
+    cauchy_entropy_symmetric,
+    cauchy_total_corr,
+)
 from sklearn.datasets import make_spd_matrix
 from scipy.stats import multivariate_t
 
@@ -9,6 +14,7 @@ from scipy.stats import multivariate_t
 class EntropyData(NamedTuple):
     X: np.ndarray
     C: np.ndarray
+    TC: float
     H: float
     dataset: str
     seed: int
@@ -46,13 +52,15 @@ def generate_studentt_data(
 
     # compute marginal entropy
     if df < 2.0:
-        H = studentt_entropy_symmetric(C)
+        H = cauchy_entropy_symmetric(C)
         dataset = "cauchy"
+        TC = cauchy_total_corr(C)
     else:
         H = studentt_entropy_symmetric(df, C)
+        TC = studentt_total_corr(df, C)
         dataset = "studentt"
 
-    return EntropyData(X=data, H=H, C=C, seed=seed, dataset=dataset)
+    return EntropyData(X=data, H=H, C=C, TC=TC, seed=seed, dataset=dataset)
 
 
 def generate_studentt_mi_data(
