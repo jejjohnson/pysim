@@ -17,3 +17,7 @@ dependences:
 - isort
 - pylint
 - flake8
+- pip
+pip:
+  - "git+https://github.com/gregversteeg/NPEET.git"
+  - "git+https://github.com/mutualinfo/mutual_info.git"
